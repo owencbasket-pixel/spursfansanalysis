@@ -2,6 +2,13 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C46RMXM5L1"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}
+gtag('js',new Date());gtag('config','G-C46RMXM5L1');
+</script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>熱刺數據站</title>
 <meta name="description" content="台灣熱刺球迷寫給熱刺球迷的賽季筆記：2026/27 英超逐場戰報、戰術拆解、球員評分、xG 數據、轉會與財務分析。">
@@ -775,12 +782,12 @@ footer ol{padding-left:18px;margin:6px 0}
   $("feed").innerHTML=POSTS.filter(function(a){return !a.isLead}).slice(0,6).map(feedItem).join("");
   $("colList").innerHTML=POSTS.map(feedItem).join("");
   $("colList").style.display="block";
-  function renderPost(id){
+  function renderPost(id){track("read_article",{article_id:id});
     var a=POSTS.filter(function(x){return x.id===id})[0];
     if(!a){$("postBody").innerHTML='<p class="muted">找不到這篇文章，可能已經下架了。<a href="#columns">看所有文章</a></p>';$("postMore").innerHTML="";return}
     $("postBody").innerHTML='<div class="kick">'+esc(a.kick)+'</div><h1>'+esc(a.title)+'</h1><div class="stand">'+esc(a.dek||"")+'</div><div class="by"><div class="avatar" aria-hidden="true">嘻</div><div><div style="font-weight:700">嘻嘻</div><div class="meta2">'+esc(a.date)+' · '+rmin(a.body)+' 分鐘讀完</div></div><button class="sharebtn" type="button" id="postShare">複製文章連結</button></div>'+art(a.id==="lead"?"lead-"+a.title:a.id,a.isLead?"lead":a.kick,800,400)+'<div class="body">'+a.body.map(function(x,i){return '<p'+(i===0?' class="drop"':'')+'>'+esc(x)+'</p>'}).join("")+'<p class="endsig">（嘻嘻）</p></div>';
     $("postMore").innerHTML=POSTS.filter(function(x){return x.id!==id}).slice(0,3).map(feedItem).join("");
-    var sb=$("postShare");if(sb)sb.addEventListener("click",function(){copy(SITE+"#a-"+id,"文章連結已複製")});
+    var sb=$("postShare");if(sb)sb.addEventListener("click",function(){track("share",{method:"copy_link",content_type:"article",item_id:id});copy(SITE+"#a-"+id,"文章連結已複製")});
   }
 
 
@@ -948,13 +955,14 @@ footer ol{padding-left:18px;margin:6px 0}
 
   /* ---- share ---- */
   var toastT;function toast(m){var t=$("toast");t.textContent=m;t.style.display="block";clearTimeout(toastT);toastT=setTimeout(function(){t.style.display="none"},2600)}
+  function track(n,p){try{if(window.gtag)gtag("event",n,p||{})}catch(e){}}
   function copy(text,ok){try{navigator.clipboard.writeText(text).then(function(){toast(ok)},function(){toast("瀏覽器不允許自動複製，請手動選取")})}catch(e){toast("瀏覽器不允許自動複製，請手動選取")}}
-  $("shareBtn").addEventListener("click",function(){var h=location.hash||"#home";copy(SITE+(h==="#admin"?"":h),"連結已複製")});
+  $("shareBtn").addEventListener("click",function(){track("share",{method:"copy_link",content_type:"page",item_id:location.hash||"#home"});var h=location.hash||"#home";copy(SITE+(h==="#admin"?"":h),"連結已複製")});
   $("matchList").addEventListener("click",function(e){var b=e.target.closest("[data-copy]");if(!b)return;var m=M.filter(function(x){return x.r==+b.getAttribute("data-copy")})[0];if(!m)return;
     var lines=["【英超第"+m.r+"輪】"+mTitle(m).replace(/ : /g,":")+"（"+ZH[res(m)]+"）",m.d+" 台北時間",""];
     m.ev.forEach(function(x){if(x[0]!=="—")lines.push(x[0]+" "+x[1]+(x[2]?"（熱刺 "+x[2]+"）":""))});
     lines.push("","控球 "+m.p+"% : "+(100-m.p)+"%","射門 "+m.s+" : "+m.os+"（射正 "+m.st+" : "+m.ost+"）","角球 "+m.c+" : "+m.oc,"",m.note,"","完整數據 "+SITE+"#matches");
-    copy(lines.join("\n"),"懶人包已複製，可以貼到 PTT、Threads")});
+    track("share",{method:"copy_recap",content_type:"match",item_id:"r"+m.r});copy(lines.join("\n"),"懶人包已複製，可以貼到 PTT、Threads")});
 
 
   /* ---- match card image (PNG) ---- */
@@ -986,7 +994,7 @@ footer ol{padding-left:18px;margin:6px 0}
   $("modalClose").addEventListener("click",function(){$("modal").style.display="none"});
   $("modal").addEventListener("click",function(e){if(e.target===$("modal"))$("modal").style.display="none"});
   $("matchList").addEventListener("click",function(e){var b=e.target.closest("[data-card]");if(!b)return;var m=M.filter(function(x){return x.r==+b.getAttribute("data-card")})[0];if(!m)return;
-    var go=function(){var cv2=drawCard(m);
+    var go=function(){track("share",{method:"match_card",content_type:"match",item_id:"r"+m.r});var cv2=drawCard(m);
       if(dl){cv2.toBlob(function(blob){dl.save({filename:"spurs-round"+m.r+".png",data:blob}).then(function(){toast("圖卡已儲存")},function(err){if(err&&err.code==="declined")return;showModal(cv2.toDataURL("image/png"))})},"image/png")}
       else showModal(cv2.toDataURL("image/png"))};
     if(document.fonts&&document.fonts.ready)document.fonts.ready.then(go);else go();
