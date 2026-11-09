@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>熱刺數據站</title>
+<meta name="description" content="台灣熱刺球迷寫給熱刺球迷的賽季筆記：2026/27 英超逐場戰報、戰術拆解、球員評分、xG 數據、轉會與財務分析。">
+<meta property="og:title" content="熱刺數據站｜熱刺 2026/27 賽季筆記">
+<meta property="og:description" content="戰報、戰術、球員評分、轉會市場，一個熱刺迷的完整賽季紀錄。">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
+<style>
+/* Layout: printed match-programme feel — masthead with rules, a lead story, ruled sections instead of boxed cards; navy ink on cool white, one blue for interaction */
+:root{
+  --ink:#101a3d;--paper:#f7f8fb;--sheet:#ffffff;--muted:#5f6683;--rule:#d9dce7;
+  --navy:#132257;--accent:#2f5bea;--win:#1d8f4e;--draw:#8a90a6;--loss:#cf3e3e;--warn:#b7800c;
+  --serif:"Noto Serif TC","Songti TC",serif;
+  --sans:"Noto Sans TC",system-ui,-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;
+  --num:"Barlow Condensed","Noto Sans TC",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ink:#e6e9f4;--paper:#0e1224;--sheet:#151a31;--muted:#9aa1bd;--rule:#2a3152;--navy:#0b153d;--accent:#8aa5ff;--win:#3cc47a;--loss:#ff7070;--warn:#e9b24a;color-scheme:dark}}
+:root[data-theme="dark"]{--ink:#e6e9f4;--paper:#0e1224;--sheet:#151a31;--muted:#9aa1bd;--rule:#2a3152;--navy:#0b153d;--accent:#8aa5ff;--win:#3cc47a;--loss:#ff7070;--warn:#e9b24a;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16.5px;line-height:1.8}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1140px;margin:0 auto;padding:0 20px}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:900;line-height:1.3;margin:0;text-wrap:balance}
+.num{font-family:var(--num);font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.muted{color:var(--muted)}.small{font-size:14.5px}.tiny{font-size:13px}
+p{margin:0 0 12px}
+
+/* masthead */
+.mast{background:var(--navy);color:#fff}
+.mast .top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.18);font-size:13px;opacity:.85;flex-wrap:wrap}
+.mast .name{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;padding:16px 0 18px;flex-wrap:wrap}
+.mast h1{font-size:clamp(36px,5.5vw,58px);letter-spacing:.04em}
+.mast .tag{font-size:15px;opacity:.85;max-width:34ch}
+.live{display:inline-flex;align-items:center;gap:6px}
+.live i{width:8px;height:8px;border-radius:50%;background:#5fe09a;display:inline-block}
+
+nav.tabs{position:sticky;top:0;z-index:20;background:var(--sheet);border-bottom:2px solid var(--ink)}
+nav.tabs .wrap{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;align-items:center}
+nav.tabs a{white-space:nowrap;text-decoration:none;color:var(--ink);font-weight:500;font-size:15px;padding:12px 12px 10px;border-bottom:3px solid transparent;margin-bottom:-2px}
+nav.tabs a:hover{color:var(--accent)}
+nav.tabs a[aria-current="page"]{border-bottom-color:var(--accent);font-weight:700}
+.sharebtn{margin-left:auto;white-space:nowrap;font:inherit;font-size:14px;background:none;border:1px solid var(--rule);color:var(--ink);border-radius:4px;padding:5px 10px;cursor:pointer}
+
+.view{display:none;padding:26px 0 10px}.view.on{display:block}
+.sec{border-top:3px solid var(--ink);padding-top:10px;margin-top:30px}
+.sec:first-child{margin-top:0}
+.sec>h2{font-size:26px;margin-bottom:4px}
+.kick{font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--accent)}
+.dek{color:var(--muted);margin:2px 0 14px;max-width:68ch}
+
+.cols{display:grid;gap:28px}
+.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:repeat(3,1fr)}.c21{grid-template-columns:1.7fr 1fr}.c12{grid-template-columns:1fr 1.5fr}
+.ruled>*+*{border-left:1px solid var(--rule);padding-left:28px}
+
+/* lead */
+.lead h2{font-size:clamp(28px,4vw,42px);margin:6px 0 10px}
+.lead .stand{font-size:18px;color:var(--muted);margin-bottom:14px;max-width:46ch}
+.byline{font-size:13px;color:var(--muted);margin-bottom:14px}
+.body p{max-width:68ch}
+.drop::first-letter{font-family:var(--serif);font-weight:900;font-size:3.1em;float:left;line-height:.95;padding:6px 8px 0 0;color:var(--navy)}
+:root[data-theme="dark"] .drop::first-letter{color:var(--accent)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .drop::first-letter{color:var(--accent)}}
+
+/* stat strip */
+.strip{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.strip>div{padding:12px 14px}
+.strip>div+div{border-left:1px solid var(--rule)}
+.strip .n{font-family:var(--num);font-size:40px;font-weight:700;line-height:1}
+.strip .l{font-size:13px;color:var(--muted);margin-top:4px}
+
+.box{background:var(--sheet);border:1px solid var(--rule);padding:16px 18px}
+.box h3{font-size:19px;margin-bottom:6px}
+.pill{display:inline-block;min-width:22px;text-align:center;font-weight:700;font-size:12px;color:#fff;border-radius:3px;padding:0 5px;line-height:19px;font-family:var(--sans)}
+.W{background:var(--win)}.D{background:var(--draw)}.L{background:var(--loss)}
+.form{display:inline-flex;gap:4px;flex-wrap:wrap}
+
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{padding:7px 8px;text-align:left;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-size:12.5px;color:var(--muted);font-weight:500;white-space:nowrap}
+.r{text-align:right}
+tr.me td{background:color-mix(in srgb,var(--accent) 12%,transparent);font-weight:700}
+th button{all:unset;cursor:pointer}
+th button:hover,th button:focus-visible{color:var(--ink);text-decoration:underline}
+th button[aria-sort]::after{content:" ▾"}th button[aria-sort="ascending"]::after{content:" ▴"}
+
+.term{border:0;background:none;padding:0;font:inherit;color:inherit;border-bottom:1.5px dotted var(--accent);cursor:help}
+#tip{position:fixed;z-index:50;max-width:290px;background:var(--ink);color:var(--sheet);font-size:14px;line-height:1.6;padding:10px 12px;border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.25);display:none}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--sheet);padding:9px 16px;border-radius:4px;font-size:14px;z-index:60;display:none;max-width:90vw}
+
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 14px}
+.chip{border:1px solid var(--rule);background:var(--sheet);color:var(--ink);border-radius:3px;padding:4px 11px;font:inherit;font-size:14px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--sheet);border-color:var(--ink)}
+
+.match{border-bottom:1px solid var(--rule)}
+.match summary{list-style:none;cursor:pointer;padding:12px 0;display:grid;grid-template-columns:30px 1fr auto;gap:12px;align-items:center}
+.match summary::-webkit-details-marker{display:none}
+.match .sc{font-family:var(--serif);font-weight:900;font-size:21px}
+.match .meta{font-size:13px;color:var(--muted)}
+.match .hint{font-size:13px;color:var(--accent)}
+.match[open] .hint{visibility:hidden}
+.match .body{padding:0 0 18px 42px;display:grid;grid-template-columns:1.3fr 1fr;gap:28px}
+.ev{list-style:none;margin:0;padding:0;font-size:14.5px}
+.ev li{padding:3px 0}
+.ev b{display:inline-block;min-width:50px;font-family:var(--num);font-size:16px}
+.sb{display:grid;grid-template-columns:34px 1fr 34px;gap:8px;align-items:center;font-size:14px;margin:4px 0}
+.sb .k{grid-column:1/-1;text-align:center;color:var(--muted);font-size:12px;margin-bottom:-6px}
+.sb .bar{display:flex;height:6px;overflow:hidden;background:var(--rule)}
+.sb .bar i{display:block;background:var(--accent)}.sb .bar b{display:block;background:var(--muted);opacity:.45}
+
+svg text{fill:var(--muted);font-family:var(--sans);font-size:12px}
+svg .ink{fill:var(--ink)}
+.chart{width:100%;height:auto;display:block}
+.legend{display:flex;gap:16px;font-size:13px;color:var(--muted);flex-wrap:wrap;margin-top:4px}
+.legend i{display:inline-block;width:11px;height:11px;margin-right:6px;vertical-align:-1px}
+
+.grade{font-family:var(--num);font-size:30px;font-weight:700;line-height:1}
+.plist{display:grid;grid-template-columns:repeat(2,1fr);gap:0 28px}
+.prow{display:grid;grid-template-columns:56px 1fr 120px;gap:14px;padding:12px 0;border-bottom:1px solid var(--rule);align-items:start}
+.prow h4{font-size:17px}
+.prow p{font-size:14.5px;margin:2px 0 0}
+
+article.col{padding:4px 0 18px;border-bottom:1px solid var(--rule)}
+article.col h3{font-size:24px;margin:2px 0 6px}
+article.col .dek{margin-bottom:10px}
+details.more summary{cursor:pointer;color:var(--accent);font-size:14.5px;list-style:none}
+details.more summary::-webkit-details-marker{display:none}
+details.more[open] summary{display:none}
+
+.newslist{list-style:none;margin:0;padding:0}
+.newslist li{padding:8px 0;border-bottom:1px solid var(--rule);font-size:15px;display:grid;grid-template-columns:50px 1fr;gap:10px}
+.newslist .d{font-family:var(--num);font-size:16px;color:var(--muted)}
+
+dl.gloss{display:grid;grid-template-columns:minmax(120px,190px) 1fr;margin:0}
+dl.gloss dt{font-weight:700;padding:10px 12px 10px 0;border-bottom:1px solid var(--rule)}
+dl.gloss dd{margin:0;padding:10px 0;border-bottom:1px solid var(--rule)}
+
+.tag2{display:inline-block;font-size:12px;padding:0 7px;border:1px solid var(--rule);color:var(--muted);border-radius:3px;white-space:nowrap}
+.tag2.hi{border-color:var(--loss);color:var(--loss)}.tag2.mid{border-color:var(--warn);color:var(--warn)}
+
+/* admin */
+.form-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr)) auto;gap:8px;align-items:end}
+.form-row label{font-size:12.5px;color:var(--muted);display:grid;gap:3px}
+input,select,textarea{font:inherit;font-size:15px;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:6px 8px;width:100%}
+textarea{min-height:110px;resize:vertical}
+.btn{font:inherit;font-size:15px;border:0;border-radius:4px;padding:7px 14px;background:var(--ink);color:var(--sheet);cursor:pointer}
+.check{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--rule);font-size:15px}
+.check input{width:18px;height:18px;margin-top:5px;flex:none}
+.check.done span{color:var(--muted);text-decoration:line-through}
+.status{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--rule);font-size:15px}
+.dotc{width:9px;height:9px;border-radius:50%;margin-top:9px;flex:none}
+
+.art{display:block;width:100%;height:auto;margin:0 0 12px;background:var(--navy)}
+.leadart{margin-bottom:16px}
+.cardbtns{display:flex;gap:8px;flex-wrap:wrap}
+#modal{position:fixed;inset:0;background:rgba(8,12,30,.78);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
+#modal .in{background:var(--sheet);max-width:440px;width:100%;padding:14px;max-height:92vh;overflow:auto}
+#modal img{width:100%;height:auto;display:block}
+.tacfig{background:#17703f;margin:0}
+.leadlink{display:block;color:inherit;text-decoration:none}
+.leadlink:hover h2{text-decoration:underline;text-decoration-thickness:2px}
+.feeditem{display:grid;grid-template-columns:220px 1fr;gap:18px;padding:16px 0;border-bottom:1px solid var(--rule);color:inherit;text-decoration:none}
+.feeditem:hover h3{color:var(--accent)}
+.feeditem .art{margin:0}
+.feeditem h3{font-size:21px;margin:2px 0 4px}
+.feeditem p{font-size:15px;color:var(--muted);margin:0}
+.meta2{font-size:13px;color:var(--muted)}
+.author{display:flex;gap:12px;align-items:center;padding-bottom:6px}
+.avatar{width:54px;height:54px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-family:var(--serif);font-weight:900;font-size:24px;flex:none;border:2px solid var(--accent)}
+.post{max-width:760px}
+.post h1{font-size:clamp(30px,4.5vw,44px);margin:8px 0 10px}
+.post .stand{font-size:19px;color:var(--muted);margin-bottom:16px}
+.post .by{display:flex;gap:10px;align-items:center;margin:0 0 18px;padding:10px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.post .by .avatar{width:40px;height:40px;font-size:18px}
+.post .body p{font-size:18px;line-height:1.95;margin:0 0 18px}
+.post .endsig{font-family:var(--serif);font-weight:900;margin-top:8px}
+.photo{width:56px;height:56px;border-radius:50%;object-fit:cover;flex:none;background:var(--rule)}
+@media (max-width:900px){.feeditem{grid-template-columns:120px 1fr;gap:12px}.feeditem h3{font-size:18px}}
+footer{margin-top:40px;padding:22px 0 40px;border-top:3px solid var(--ink);font-size:13px;color:var(--muted)}
+footer ol{padding-left:18px;margin:6px 0}
+
+@media (max-width:900px){.c2,.c3,.c21,.c12,.plist{grid-template-columns:1fr}.ruled>*+*{border-left:0;padding-left:0;border-top:1px solid var(--rule);padding-top:18px}.strip{grid-template-columns:repeat(3,1fr)}.strip>div:nth-child(4){border-left:0}.strip>div:nth-child(n+4){border-top:1px solid var(--rule)}.match .body{grid-template-columns:1fr;padding-left:0}.form-row{grid-template-columns:1fr 1fr}}
+.radar{display:block}
+@media (max-width:440px){.prow{grid-template-columns:48px 1fr}.prow .radar{grid-column:2;width:110px;height:80px}.strip{grid-template-columns:1fr 1fr}.strip>div{border-left:0!important;border-top:1px solid var(--rule)}.strip .n{font-size:32px}dl.gloss{grid-template-columns:1fr}dl.gloss dt{border-bottom:0;padding-bottom:0}}
+</style>
+</head>
+<body>
+
+<!--
+  ===== 網站內容資料 =====
+  以下四個 <script type="application/json"> 區塊是網站所有會變動的內容。
+  排程更新只修改這四個區塊，版面與程式不動。
+-->
+<script type="application/json" id="data-core">
+{
+ "meta":{"updated":"2026-11-09T21:50:00+08:00","checked":"2026-11-09T21:50:00+08:00","round":10,"season":"2026/27"},
+ "next":{"opp":"伊普斯維奇","iso":"2026-11-21T23:00:00+08:00","ha":"主","round":12,"prob":[62.2,21.0,16.8],"oppRank":14,"oppPts":11,"oppForm":"WLDDL","oppGF":15,"oppGA":20,"oppNote":"客場 1 勝 1 和 3 負",
+   "preview":["伊普斯維奇 10 場丟了 20 球，是聯盟最好突破的防線之一。熱刺這季最大的煩惱是進不了球，這場就是拿來治病的。","但別小看他們的進攻，15 個進球比熱刺還多 5 球。上一場主場 1:2 輸給伯恩茅斯，賽前已經連續 3 場沒贏，會帶著求勝慾來倫敦。","我的預測：熱刺 2:1。前 30 分鐘如果還是慢熱，就準備再看一次 75 分鐘後的大逆轉戲碼。"]},
+ "standings":[["兵工廠",9,0,1,27],["布萊頓",7,1,2,22],["曼城",7,0,3,21],["利物浦",5,3,2,18],["切爾西",5,1,4,16],["艾佛頓",4,4,2,16],["伯恩茅斯",4,3,3,15],["布倫特福德",3,5,2,14],["里茲聯",3,5,2,14],["阿斯頓維拉",3,4,3,13],["熱刺",3,3,4,12],["紐卡索",3,3,4,12],["赫爾城",2,5,3,11],["伊普斯維奇",3,2,5,11],["富勒姆",2,4,4,10],["諾丁漢森林",2,3,5,9],["考文垂",3,0,7,9],["曼聯",1,5,4,8],["桑德蘭",2,2,6,8],["水晶宮",2,1,7,7]],
+ "fixtures":[["2026-11-21T23:00:00+08:00","伊普斯維奇","主"],["2026-11-29T22:05:00+08:00","桑德蘭","客"],["2026-12-04T04:00:00+08:00","富勒姆","主"],["2026-12-07T00:30:00+08:00","兵工廠","主"],["2026-12-15T04:00:00+08:00","赫爾城","客"],["2026-12-20T01:30:00+08:00","利物浦","客"],["2026-12-26T23:00:00+08:00","伯恩茅斯","主"],["2026-12-30T03:30:00+08:00","布萊頓","主"],["2027-01-04T00:30:00+08:00","曼城","客"]],
+ "news":[["11/9","國際賽週開打，英超停賽到 11/21。對里茲傷退的兩人恢復得如何，是這兩週最該關注的消息。"],["11/7","客場 0:1 輸里茲，三連勝斷在約克郡。控球 61% 卻只射 6 腳，另有兩人傷退。"],["11/1","主場 2:0 收拾 10 人水晶宮，三連勝，一度升到第 8。Gray、van Hecke 都是頭球破門。"],["10/24","史丹福橋 2:0 贏切爾西，2018 年後第一次在那裡贏球。"],["10/19","3:1 考文垂，本季聯賽首勝；Kulusevski 缺陣 526 天後替補復出。"]],
+ "rumours":[["Roberto Fernández","前鋒 / 西班牙人","TEAMtalk 說是 2027 年的頭號目標，熱刺已經加大接觸","hi"],["Jean-Philippe Mateta","前鋒 / 水晶宮","身價約 €3,000 萬，和維拉搶人；剛因紅牌停賽 3 場","mid"],["Igor Matanović","前鋒 / 弗萊堡","約 €4,000 萬，高大中鋒，能當禁區支點","mid"],["三笘薰 Mitoma","邊鋒 / 布萊頓","德澤爾比舊將，合約剩不多，布萊頓可能願意降價","mid"],["Morgan Gibbs-White","攻擊中場 / 森林","追了很久，但報導身價高達 £1.25 億","lo"],["Vangelis Pavlidis","前鋒 / 本菲卡","在 5 人名單上，但解約金 €1 億","lo"],["吳賢揆 Oh Hyeon-gyu","前鋒 / 貝西克塔斯","主要是韓國媒體在報","lo"]],
+ "adv":{"xg":11.7,"xgRank":14,"xgSrc":"FotMob","gk":{"name":"Kinsky","mins":810,"sota":30,"saves":20,"savePct":66.7,"cs":4,"xgot":8.07,"conceded":10,"asOf":"第 9 輪"},
+   "def":[["Gallagher",3.7,1.2,0.6,6.5],["M. Fernandes",3.2,0.8,0.4,5.4],["Kudus",1.8,0.6,0.4,5.3],["Tonali",2.5,1.0,1.1,5.0],["Senesi",3.0,1.0,4.5,5.0],["van Hecke",1.8,1.0,4.4,3.7],["Udogie",1.0,2.1,2.6,4.1],["van de Ven",1.0,0.4,3.8,3.8],["Robertson",1.1,0.6,2.0,3.7]]}
+}
+</script>
+
+<script type="application/json" id="data-matches">
+[
+ {"r":1,"d":"8/23（日）00:30","o":"布倫特福德","h":"客","f":0,"a":3,"p":59,"s":9,"st":4,"os":24,"ost":8,"c":3,"oc":7,"y":1,"oy":1,"gf":[],"ga":[12,33,49],
+  "ev":[["12′","布倫特福德進球","0:1"],["33′","布倫特福德進球","0:2"],["49′","布倫特福德進球","0:3"]],
+  "note":"開幕戰就被打醒。控球比較多又怎樣，對手射了 24 腳，後防像沒關的門。",
+  "xi":"Kinsky；Gray、van Hecke、Senesi、Robertson；Bergvall、Tonali、Gallagher；Moore、Tel、Richarlison"},
+ {"r":2,"d":"8/30（日）00:30","o":"紐卡索","h":"主","f":0,"a":2,"p":58,"s":16,"st":5,"os":7,"ost":2,"c":9,"oc":7,"y":1,"oy":2,"gf":[],"ga":[62,72],
+  "ev":[["62′","紐卡索進球","0:1"],["72′","紐卡索進球","0:2"]],
+  "note":"射門 16 比 7，結果是 0:2。前一小時明明壓著打，被進一球之後整隊就散了。",
+  "xi":"Kinsky；Porro、van Hecke、van de Ven、Robertson；Gray、Tonali、Bentancur、M. Fernandes；Tel、Marmoush"},
+ {"r":3,"d":"9/5（六）22:00","o":"諾丁漢森林","h":"客","f":0,"a":0,"p":57,"s":7,"st":0,"os":9,"ost":1,"c":10,"oc":2,"y":2,"oy":2,"gf":[],"ga":[],
+  "ev":[["—","雙方都沒進球",""]],
+  "note":"終於拿到第一分、第一場零封。但 7 腳射門沒有一腳打在門框內，這數字我看了很久。",
+  "xi":"Kinsky；Porro、van Hecke、van de Ven、Udogie；Bentancur、Tonali、Gallagher；Savio、Tel、Marmoush"},
+ {"r":4,"d":"9/13（日）00:30","o":"艾佛頓","h":"主","f":0,"a":0,"p":63,"s":12,"st":2,"os":10,"ost":3,"c":5,"oc":6,"y":0,"oy":2,"gf":[],"ga":[],
+  "ev":[["—","雙方都沒進球",""]],
+  "note":"六萬人進場看了 90 分鐘悶和。聯賽連續第 4 場沒進球。",
+  "xi":"Kinsky；Gray、van Hecke、van de Ven、Robertson；Bentancur、Tonali、M. Fernandes；Savio、Solanke、Marmoush"},
+ {"r":5,"d":"9/19（六）19:30","o":"阿斯頓維拉","h":"主","f":2,"a":3,"p":63,"s":18,"st":8,"os":14,"ost":6,"c":11,"oc":1,"y":1,"oy":2,"gf":[86,98],"ga":[49,67,79],
+  "ev":[["19′","Porro 受傷退場，Gray 頂上",""],["49′","維拉 Manzambi 破門","0:1"],["67′","維拉 Jackson 破門","0:2"],["79′","維拉 Buendía 破門","0:3"],["86′","Gallagher 進球，本季聯賽第一球","1:3"],["90+8′","van Hecke 頭槌，Robertson 自由球助攻","2:3"]],
+  "note":"等了 445 分鐘的進球終於來了，可惜來得太晚。賽後一度掉進降級區。",
+  "xi":"Kinsky；Porro、van Hecke、van de Ven、Robertson；Bentancur、Tonali、M. Fernandes；Savio、Solanke、Marmoush"},
+ {"r":6,"d":"10/11（日）00:30","o":"曼聯","h":"客","f":1,"a":1,"p":51,"s":10,"st":3,"os":11,"ost":4,"c":4,"oc":4,"y":3,"oy":4,"gf":[92],"ga":[73],
+  "ev":[["73′","曼聯 Mbeumo 先進球","0:1"],["78′","Bentancur 頭槌 Shaw，直接紅牌",""],["90+2′","Solanke 頭球扳平","1:1"]],
+  "note":"少一個人還在補時追平。德澤爾比賽後說，這支球隊終於有了不肯認輸的樣子。我同意。",
+  "xi":"Kinsky；Gray、van Hecke、Senesi、Udogie；Bergvall、Tonali、Gallagher；Savio、Solanke、Kudus"},
+ {"r":7,"d":"10/20（二）03:00","o":"考文垂","h":"主","f":3,"a":1,"p":66,"s":15,"st":5,"os":6,"ost":2,"c":4,"oc":4,"y":1,"oy":3,"gf":[14,58,96],"ga":[49],
+  "ev":[["14′","Maddison 進球","1:0"],["49′","考文垂 Rudoni 扳平","1:1"],["58′","Marmoush 弧線球，加盟後首球","2:1"],["87′","Kulusevski 缺陣 526 天後替補上場",""],["90+6′","Davies 補時鎖勝","3:1"]],
+  "note":"第 7 輪才拿到聯賽首勝，脫離墊底。Kulusevski 上場那一刻，主場的掌聲比進球還大。",
+  "xi":"Kinsky；Adarabioyo、van Hecke、van de Ven、Robertson；Gray、Tonali；Kudus、Maddison、Marmoush；Solanke"},
+ {"r":8,"d":"10/25（日）00:30","o":"切爾西","h":"客","f":2,"a":0,"p":69,"s":11,"st":4,"os":6,"ost":4,"c":6,"oc":4,"y":3,"oy":3,"gf":[77,87],"ga":[],
+  "ev":[["77′","切爾西門將 Penders 把角球打進自家球門","1:0"],["80′","Palmer 兩黃變一紅",""],["87′","Tel 帶球 45 公尺後破門","2:0"]],
+  "note":"2018 年後第一次在史丹福橋贏球。Fernandes 改踢最後腰，整場摸了 124 次球，這場是轉捩點。",
+  "xi":"Kinsky；Gray、van Hecke、van de Ven、Robertson；M. Fernandes、Tonali、Maddison；Kudus、Tel、Marmoush"},
+ {"r":9,"d":"11/1（日）01:30","o":"水晶宮","h":"主","f":2,"a":0,"p":79,"s":28,"st":7,"os":2,"ost":1,"c":19,"oc":0,"y":1,"oy":1,"gf":[25,73],"ga":[],
+  "ev":[["13′","Mateta 鏟到 van de Ven，VAR 改判直接紅牌",""],["25′","Gray 角球頭槌","1:0"],["73′","van Hecke 頭球，Fernandes 傳中","2:0"]],
+  "note":"三連勝。對手 13 分鐘就少一人，之後就是半場攻防演練，xG 3.30 比 0.18。",
+  "xi":"Kinsky；Gray、van Hecke、van de Ven、Robertson；M. Fernandes、Tonali；Kudus、Tel、Marmoush、Solanke"},
+ {"r":10,"d":"11/7（六）20:30","o":"里茲聯","h":"客","f":0,"a":1,"p":61,"s":6,"st":4,"os":16,"ost":3,"c":4,"oc":6,"y":3,"oy":2,"gf":[],"ga":[79],
+  "ev":[["43′","半場前就被迫換人",""],["65′","一口氣換 3 個人",""],["79′","里茲進球","0:1"]],
+  "note":"控球 61%，射門 6 比 16。打法太軟，被對方的身體對抗吃得死死的，還有兩人傷退。",
+  "xi":"Kinsky；Porro、van Hecke、van de Ven、Robertson；Gray、Tonali、M. Fernandes；Kudus、Tel、Marmoush"}
+]
+</script>
+
+<script type="application/json" id="data-players">
+[
+ ["Kinsky","金斯基","門將",10,0,0,6,"10 場全先發、4 場零封，表面數字不差。但阻止進球值是 −1.93，被射正後擋下的比例偏低，後場出球也偶爾手軟。"],
+ ["van Hecke","范赫克","後衛",10,2,0,8,"5,200 萬買來的老部下，10 場全勤，還是隊上進球最多的人。兩球都是頭槌，空中球幾乎不會輸。"],
+ ["van de Ven","范德文","後衛",8,0,0,7,"新隊長。速度依舊是全聯盟頂級，對水晶宮那張紅牌就是他用速度逼出來的。"],
+ ["Robertson","羅伯遜","後衛",8,0,2,7.5,"自由轉會撿到寶。2 次助攻都是傳中，定位球主罰，年紀大了但腦袋很清楚。"],
+ ["Porro","波羅","後衛",4,0,0,6,"大腿後側反覆受傷，對維拉 19 分鐘就下場。健康的他是隊上最會製造機會的後衛，得先站穩。"],
+ ["Udogie","烏多吉","後衛",2,0,0,5.5,"上場不多，攔截數據不錯，但已經被 Robertson 擠到板凳。"],
+ ["Senesi","塞內西","後衛",2,0,0,6,"兩場先發都穩，解圍數據高，是很稱職的第三中衛。"],
+ ["Adarabioyo","阿達拉比奧約","後衛",1,0,0,null,"出場太少，先不評。"],
+ ["Davies","戴維斯","後衛",0,1,0,null,"沒先發過，但對考文垂那記補時進球讓全場起立。"],
+ ["Gray","格雷","中場",8,1,0,7,"名義上是中場，這季大多踢右後衛。哪裡缺人就補哪裡，還頭槌進了一球，20 歲的成熟度少見。"],
+ ["Tonali","托納利","中場",10,0,1,6.5,"一億英鎊的身價壓在肩上。10 場全先發，防守和覆蓋都在水準，但傳球還沒踢出米蘭、紐卡索時期的主宰感。"],
+ ["M. Fernandes","費爾南德斯","中場",6,0,0,7.5,"切爾西一戰改踢最後腰之後，熱刺的中場終於有了節奏。被壓迫時還能往前傳，這種球員很少。"],
+ ["Bentancur","本坦庫爾","中場",4,0,0,5,"對曼聯那記頭槌太不理智，害球隊少踢 15 分鐘。之後就沒再先發。"],
+ ["Gallagher","加拉格爾","中場",3,1,0,6.5,"跑不死的工兵，每 90 分鐘搶斷 3.7 次是全隊最高。本季聯賽第一球就是他。"],
+ ["Bergvall","貝里瓦爾","中場",2,0,0,null,"上場時間太少，先不評。"],
+ ["Maddison","麥迪遜","中場",2,1,0,7,"傷癒回來第一場先發就對考文垂進球。有他在，中路才有人敢傳那種穿透球。"],
+ ["Kudus","庫杜斯","前鋒",5,0,3,7.5,"3 次助攻全隊第一。近 5 場全先發，右路是熱刺現在最可靠的進攻來源。"],
+ ["Marmoush","馬穆什","前鋒",8,1,0,5.5,"8 次先發 1 球。跑位很積極，但站到中鋒位置時不夠兇，看起來比較適合邊路。"],
+ ["Tel","特爾","前鋒",6,1,0,6.5,"對切爾西帶球 45 公尺的那一球是本季最佳進球之一。穩定度還要磨。"],
+ ["Solanke","索蘭克","前鋒",5,1,1,6,"1 球 1 助攻，對曼聯補時扳平。傷癒後還沒找回去年的手感。"],
+ ["Savio","薩維奧","前鋒",4,0,0,5,"7,500 萬的邊鋒，4 次先發 0 進球 0 助攻。近 5 場都沒先發，是這季最讓人擔心的投資。"],
+ ["Moore","摩爾","前鋒",1,0,0,null,"青訓小將，聯賽只踢了開幕戰。"],
+ ["Richarlison","理查利森","前鋒",1,0,0,null,"開幕戰之後就被教練排除在名單外，冬窗大概會走。"],
+ ["Kulusevski","庫盧塞夫斯基","前鋒",0,0,0,null,"缺陣 526 天後回來了，先讓他慢慢踢。"],
+ ["Mudryk","穆德里克","前鋒",0,0,0,null,"租借自切爾西，替補 1 次。"]
+]
+</script>
+
+<script type="application/json" id="data-articles">
+{
+ "lead":{"kick":"本週封面","title":"三連勝之後的一記悶棍：熱刺到底變好了沒？","stand":"10 輪過後排第 11，前 5 輪 2 分、後 5 輪 10 分。這是同一支球隊，也不是同一支球隊。","date":"2026/11/9",
+  "body":["老實說，9 月底的時候我已經準備好寫「降級保衛戰第二季」了。花了快 4 億英鎊，前 5 輪 0 勝 2 分、進 2 球，排在第 20。那時候連熱刺迷自己都在問：德澤爾比到底在練什麼？",
+   "然後 10 月來了。曼聯客場少一人還在補時扳平，接著連贏考文垂、切爾西、水晶宮，三場進 7 球只丟 1 球。轉變的關鍵我認為不是哪個新援突然開竅，而是德澤爾比在切爾西那場把 Mateus Fernandes 往後拉到最後腰。後場出球終於有人能在壓迫下接球、轉身、往前送，整隊的節奏一下就順了。",
+   "所以里茲那場輸球才更讓人氣。控球 61%，射門 6 比 16，碰到一支願意貼身、願意拚對抗的球隊，熱刺又變回那個好看但沒牙齒的樣子。",
+   "我的看法是：熱刺確實變好了，但只好了一半。中後場已經有骨架，van Hecke、Tonali、Kinsky 10 場全先發，近 5 場只丟 3 球。前場還是靠後衛頭槌和對手送禮在進球。12 月連碰兵工廠、利物浦、布萊頓、曼城之前，下兩場伊普斯維奇和桑德蘭一定要全拿，不然這波反彈很快就會被打回原形。"]},
+ "articles":[
+  {"id":"finish","date":"2026/11/9","kick":"進攻","title":"射得比人多，進得比人少","dek":"熱刺缺的不是機會，是一個會把機會變成進球的人。",
+   "body":["10 輪下來，熱刺射了 132 腳，對手合計 105 腳。進球呢？熱刺 10 球，對手 11 球。換句話說，熱刺平均要射 13 腳才進 1 球，對手 10 腳就夠了。",
+    "很多人會說是創造力不夠，但數字不太支持這個說法。FotMob 算出來熱刺的預期進球是 11.7，實際只進 10 球，該進的球沒進。再看是誰在進球：後衛 van Hecke 2 球、Davies 1 球，加上一個烏龍球。三個前鋒 Solanke、Marmoush、Tel 加起來只有 3 球。",
+    "對切爾西那場更明顯，熱刺 58 次推進到前場三分之一，只換到 0.74 的 xG，是本季全聯盟最差的比例之一。球常常帶到禁區前，然後就沒有然後了。",
+    "所以冬窗傳聞幾乎全是中鋒，一點都不意外。熱刺需要的不是另一個會傳球的人，而是能把半個機會變成一個進球的終結者。"]},
+  {"id":"pivot","date":"2026/11/9","kick":"戰術","title":"費爾南德斯往後站一步，熱刺就順了","dek":"切爾西一戰的位置調整，是本季最重要的戰術決定。",
+   "body":["德澤爾比的足球從門將開始：門將和中衛故意在後場傳球，把對手的壓迫引上來，再用短傳一層一層穿過去。這套東西很好看，但前提是後場每個人都敢在壓力下拿球。開季前 5 輪，熱刺做不到。",
+    "切爾西那場，德澤爾比第一次讓 Mateus Fernandes 踢最深的位置，旁邊搭 Tonali。結果 Fernandes 全場觸球 124 次，是本季英超客場單場最高；102 次傳球成功率 92%，在被壓迫的情況下還送出 21 次穿透線的傳球，整個聯盟沒有第二個人做到。",
+    "這個調整解決了出球的問題，也讓 Tonali 可以往前多跑一點。之後兩場對水晶宮、里茲，這組雙後腰都繼續先發。",
+    "下一步是前場。Fernandes 把球送到了前面，前面的人要接得住、做得出東西。這就回到上一篇的老問題了。"]},
+  {"id":"late","date":"2026/11/9","kick":"比賽節奏","title":"慢熱的熱刺：10 球有 6 球在第 76 分鐘之後","dek":"板凳和體能是優點，開局太慢是缺點。",
+   "body":["熱刺本季 10 個聯賽進球，有 6 個發生在第 76 分鐘之後：對維拉的兩球、曼聯補時扳平、考文垂補時鎖勝、切爾西的烏龍球和 Tel 的破門。",
+    "好的一面是換人有用，體能撐得住，少一個人也敢壓上去。壞的一面是上半場只進 2 球，很多比賽要等到落後才開始拚命。",
+    "還有一個時段要注意：46 到 75 分鐘，熱刺在這段丟了 7 球，佔全部失球六成以上。下半場一開始的專注力，是教練組接下來要解決的事。"]},
+  {"id":"setpiece","date":"2026/11/9","kick":"定位球","title":"沒人在討論的武器：定位球","dek":"10 球裡至少 4 球跟定位球有關。",
+   "body":["van Hecke 對維拉頭槌接 Robertson 的自由球，對水晶宮再頂進一球；Gray 角球頭槌；還有切爾西門將把角球打進自家球門。運動戰進不了球的時候，定位球幫熱刺撐住了。",
+    "Robertson 是關鍵。自由轉會來的 32 歲老將，2 次助攻都是精準傳中。van Hecke 和 van de Ven 的身高讓禁區裡永遠有目標。",
+    "下一場的伊普斯維奇 10 場丟了 20 球，定位球很可能又是突破口。"]},
+  {"id":"money","date":"2026/11/9","kick":"財務","title":"3.8 億英鎊的重建，現在算得出值不值嗎？","dek":"中場的錢已經回本一部分，鋒線還欠著。",
+   "body":["夏窗 10 名新援約 3.8 億英鎊，賣球員收回大約 1.42 億，淨支出約 2.4 億。錢大多砸在中場（Tonali、Fernandes 合計約 1.78 億）和鋒線（Savio、Marmoush 約 1.35 億）。",
+    "中場這筆已經看得到成果：Tonali 10 場全先發，Fernandes 從切爾西那場開始成了球隊的節拍器。鋒線就難說了，Savio 4 次先發 0 進球，Marmoush 8 次先發 1 球。",
+    "更大的帳在明年。2027 年夏天要付給曼城 6,000 萬買斷 Marmoush，而 Danso 那筆約 2,250 萬的回收款，要看桑德蘭能不能保級，他們現在排第 19。這季能不能擠進歐戰區，會直接決定這本帳怎麼算。"]},
+  {"id":"december","date":"2026/11/9","kick":"賽程","title":"12 月是地獄，11 月一定要先把分數存起來","dek":"Opta 的賽程難度表：先是全聯盟最輕鬆，然後是最難。",
+   "body":["Opta 用各隊實力評分算過，熱刺 10 月底開始的 5 場（水晶宮、里茲、伊普斯維奇、桑德蘭、富勒姆）是全聯盟最好打的一段。可惜第一場里茲就沒拿到分。",
+    "12 月 4 日開始畫風完全不同：兵工廠、利物浦、布萊頓、伯恩茅斯，然後客場曼城，是全聯盟最硬的連戰。",
+    "我的算法很簡單：伊普斯維奇、桑德蘭、富勒姆三場拿 7 分以上，12 月就算只拿 5、6 分，熱刺跨年時還能待在前 10。如果這三場又丟分，北倫敦德比之前大家就要開始緊張了。"]}
+ ]
+}
+</script>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="top"><span>熱刺數據站 · 2026/27 賽季 · 台灣時間</span><span id="freshness" class="live"><i></i>資料更新中</span></div>
+    <div class="name">
+      <h1>嘻嘻的熱刺筆記</h1>
+      <div class="tag">一個台灣熱刺迷寫給熱刺迷的專欄。戰術、數字、轉會，還有一點點偏心。</div>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="網站分頁">
+  <div class="wrap">
+    <a href="#home">首頁</a>
+    <a href="#matches">戰報</a>
+    <a href="#tactics">戰術與球員</a>
+    <a href="#stats">數據</a>
+    <a href="#market">轉會與財務</a>
+    <a href="#columns">所有文章</a>
+    <a href="#glossary">小教室</a>
+    <button class="sharebtn" id="shareBtn" type="button">複製本頁連結</button>
+  </div>
+</nav>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<main class="wrap">
+
+<!-- ===== 首頁（作者專欄） ===== -->
+<section class="view" id="v-home" aria-label="首頁">
+  <div class="cols c21 ruled">
+    <div>
+      <a class="leadlink" href="#a-lead" id="leadStory"></a>
+      <div class="sec">
+        <h2 style="font-size:22px">最新文章</h2>
+        <div id="feed"></div>
+      </div>
+    </div>
+    <aside>
+      <div class="author">
+        <div class="avatar" aria-hidden="true">嘻</div>
+        <div><div style="font-family:var(--serif);font-weight:900;font-size:20px">嘻嘻</div><div class="small muted">台灣熱刺迷。寫戰術、數據和轉會，每場比賽後更新。</div></div>
+      </div>
+      <div class="sec">
+        <div class="kick">下一場</div>
+        <h3 id="nxTitle" style="font-size:22px;margin:4px 0 2px"></h3>
+        <div class="small muted num" id="nxWhen"></div>
+        <div id="nxCountdown" class="num" style="font-size:28px;font-weight:700;margin:8px 0 2px"></div>
+        <div id="nxProb" style="margin:6px 0 10px"></div>
+        <table class="small" id="nxTable"></table>
+        <div id="nxPreview" class="small" style="margin-top:12px"></div>
+      </div>
+      <div class="sec">
+        <h2 style="font-size:20px">最新動態</h2>
+        <ul class="newslist" id="newsList"></ul>
+      </div>
+      <div class="sec">
+        <h2 style="font-size:20px">現在的熱刺</h2>
+        <div class="strip" id="homeStrip" style="grid-template-columns:1fr 1fr"></div>
+        <svg id="ptsChart" class="chart" viewBox="0 0 520 220" role="img" aria-label="累積積分走勢" style="margin-top:12px"></svg>
+      </div>
+      <div class="sec">
+        <h2 style="font-size:20px">在台灣怎麼看</h2>
+        <p class="small"><strong>ELTA.tv（愛爾達）</strong>是本季英超在台灣的主要平台，每輪播精選場次、可回看；<strong>MOD</strong> 有精選場次但沒有回看；<strong>Hami Video</strong> 本季沒有英超。熱刺不一定每場都在精選裡，賽前記得查節目表。</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ===== 單篇文章 ===== -->
+<section class="view" id="v-article" aria-label="文章">
+  <article class="post" id="postBody"></article>
+  <div class="sec" style="max-width:760px">
+    <h2 style="font-size:20px">繼續讀</h2>
+    <div id="postMore"></div>
+  </div>
+</section>
+
+<!-- ===== 戰報 ===== -->
+<section class="view" id="v-matches" aria-label="戰報">
+  <div class="sec">
+    <h2>逐場戰報</h2>
+    <p class="dek">本季每一場英超都在這裡。點開看進球時間、紅黃牌、數據和先發；「複製賽後懶人包」可以直接貼到 PTT 或 Threads。</p>
+    <div class="chips" role="group" aria-label="篩選">
+      <button class="chip" data-mf="all" aria-pressed="true">全部</button>
+      <button class="chip" data-mf="W" aria-pressed="false">贏球</button>
+      <button class="chip" data-mf="D" aria-pressed="false">和局</button>
+      <button class="chip" data-mf="L" aria-pressed="false">輸球</button>
+      <button class="chip" data-mf="主" aria-pressed="false">主場</button>
+      <button class="chip" data-mf="客" aria-pressed="false">客場</button>
+    </div>
+    <div id="matchList"></div>
+  </div>
+  <div class="cols c2 ruled" style="margin-top:26px">
+    <div>
+      <h3 style="font-size:20px;margin-bottom:6px">接下來的賽程</h3>
+      <div class="tbl-wrap"><table class="small" id="fixTable"><thead><tr><th>台北時間</th><th>對手</th><th>主/客</th><th class="r">對手排名</th></tr></thead><tbody></tbody></table></div>
+    </div>
+    <div>
+      <h3 style="font-size:20px;margin-bottom:6px">盃賽</h3>
+      <table class="small">
+        <tr><td>聯賽盃第 2 輪</td><td>熱刺 5:1 查爾頓</td><td class="muted">Danso、Savio、Solanke、Davies、Moore 各進 1 球</td></tr>
+        <tr><td>聯賽盃第 3 輪</td><td>利物浦 3:1 熱刺</td><td class="muted">出局</td></tr>
+        <tr><td>足總盃</td><td colspan="2" class="muted">1 月才開打</td></tr>
+        <tr><td>歐戰</td><td colspan="2" class="muted">上季第 17 名，這季沒有歐戰</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 戰術與球員 ===== -->
+<section class="view" id="v-tactics" aria-label="戰術與球員">
+  <div class="sec">
+    <div class="kick">戰術拆解</div>
+    <h2 style="font-size:32px;margin:4px 0 8px">德澤爾比在熱刺想做什麼，做到了多少</h2>
+    <figure class="tacfig" id="tacFig"></figure>
+    <p class="tiny muted" style="margin:6px 0 18px">示意圖：依本季先發次數與比賽報導整理的常用站位與出球路線，不是精確的比賽位置。實線是常見傳球路線，虛線是跑動。</p>
+    <div class="cols c2 ruled body">
+      <div>
+        <h3 style="font-size:20px">一、從門將開始的足球</h3>
+        <p>德澤爾比的招牌是「誘壓」：門將和兩個中衛刻意在禁區附近慢慢傳，把對手前鋒引上來，等壓迫線一拉開，再用短傳一層一層穿過去，最後讓邊鋒斜插肋部。從先發名單看，陣型多半是 4-3-3 或 4-2-3-1。</p>
+        <p>這套東西風險很高。後場只要有一個人在壓力下慌了，就會在自家禁區前丟球。開季前 5 輪熱刺就是這樣：Kinsky 出球不夠穩，新的中衛組合還在磨合，被布倫特福德、維拉一壓就出事。</p>
+        <h3 style="font-size:20px;margin-top:18px">二、轉捩點：費爾南德斯退到最後腰</h3>
+        <p>切爾西那場是全季最重要的調整。Mateus Fernandes 第一次踢在最深的位置，Tonali 搭在旁邊。被壓迫時還能轉身往前傳的 Fernandes 解決了出球問題，那場他在高壓下的穿透傳球數，整個聯盟沒人比得上。之後三場這組雙後腰都繼續先發，熱刺拿了 6 分。</p>
+        <h3 style="font-size:20px;margin-top:18px">三、右後衛的秘密：Archie Gray</h3>
+        <p>Gray 名義上是中場，這季卻有 8 場先發大多擺在右路後衛。他拿球的能力比傳統邊後衛好，等於讓後場出球多一個中場球員。Porro 傷癒後兩人怎麼分配，是接下來要觀察的。</p>
+      </div>
+      <div>
+        <h3 style="font-size:20px">四、最大的問題在最後 30 公尺</h3>
+        <p>球帶得上去，進不了球。對切爾西 58 次推進到前場三分之一，只換到 0.74 的 xG。常見的畫面是：球到了禁區弧頂，最後一傳傳不出去，只好往邊路回傳，再傳中，再被解圍。</p>
+        <p>Savio 和 Marmoush 本來是買來負責速度與縱深的，但目前邊路突破缺少殺傷力，Marmoush 踢中鋒時也不夠兇。三個前鋒合計 3 球，這是整個戰術最大的缺口。</p>
+        <h3 style="font-size:20px;margin-top:18px">五、壓迫還沒裝好，防守卻先穩了</h3>
+        <p>高位壓迫的時機還沒練到位，有時前場壓上去、中場沒跟上，中間就空出一大塊。但近 5 場只丟 3 球，靠的是 van Hecke、van de Ven 的空中與速度，加上 Fernandes、Gallagher 的回追。</p>
+        <h3 style="font-size:20px;margin-top:18px">六、比賽後段與定位球</h3>
+        <p>10 球有 6 球在第 76 分鐘後打進，至少 4 球和定位球有關。這兩件事說明熱刺的板凳和定位球設計都有東西，但也說明運動戰的進攻還撐不起一場比賽。</p>
+        <div class="box" style="margin-top:14px">
+          <h3>我的結論</h3>
+          <p class="small" style="margin:0">這不是理念有問題，是還沒裝完。中後場的骨架已經在了，冬窗如果能補到一個真正的中鋒，熱刺下半季會是另一支球隊。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>球員評分</h2>
+    <p class="dek">10 輪下來的個人評分，滿分 10 分，是嘻嘻的主觀判斷，上場太少的先不打分。右邊的能力圖依本季數據自動畫出：先發是佔全部場次的比例，進球、助攻和隊上最多的人比。</p>
+    <div class="chips" role="group" aria-label="依位置篩選評分">
+      <button class="chip" data-gf="all" aria-pressed="true">全部</button>
+      <button class="chip" data-gf="門將" aria-pressed="false">門將</button>
+      <button class="chip" data-gf="後衛" aria-pressed="false">後衛</button>
+      <button class="chip" data-gf="中場" aria-pressed="false">中場</button>
+      <button class="chip" data-gf="前鋒" aria-pressed="false">前鋒/邊鋒</button>
+    </div>
+    <div class="plist" id="gradeList"></div>
+  </div>
+
+  <div class="sec">
+    <h2>教練：羅伯托・德澤爾比</h2>
+    <div class="cols c2 ruled body">
+      <div>
+        <p>2026 年 3 月底接手時，熱刺離降級區只有一步。他用最後 7 場拿 11 分保級，最後一輪 1:0 艾佛頓，比降級區多 2 分。之後俱樂部給了他 5 年合約和很大的足球事務主導權。</p>
+        <p>夏窗的名單幾乎都照他的戰術需求挑，van Hecke、Mudryk 都是舊部。開季前 5 輪的成績一度讓下課聲浪出現，但俱樂部高層從沒動搖過。</p>
+      </div>
+      <div>
+        <p>他的優點是戰術想法清楚、敢做調整，切爾西一戰的位置變化就是例子。缺點是體系要時間磨合，而且他賽後講話很直，跟球員和高層的關係一旦出狀況，會很快浮上檯面。</p>
+        <p>這季的及格線，我會訂在前 8 名、進一個盃賽四強。比這好就是驚喜，比這差就要開始問問題了。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>傷病與陣容動態</h2>
+    <ul class="newslist">
+      <li><span class="d">傷癒</span><span>Porro 大腿後側傷癒，對里茲重回先發。</span></li>
+      <li><span class="d">回歸</span><span>Kulusevski 缺陣 526 天後，10/19 對考文垂替補復出；Maddison、Kudus、Solanke 也都傷癒回來。</span></li>
+      <li><span class="d">停賽</span><span>Bentancur 對曼聯吃直接紅牌，已執行完停賽。</span></li>
+      <li><span class="d">邊緣</span><span>Richarlison 開幕戰後就被排除在名單外。</span></li>
+      <li><span class="d">待確認</span><span>對里茲有 2 人傷退，國際賽週後要看恢復情況。</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== 數據 ===== -->
+<section class="view" id="v-stats" aria-label="數據">
+  <div class="sec">
+    <h2>球隊數據</h2>
+    <p class="dek">10 場英超的球隊數字。看到有虛線底線的詞，點一下會有解釋。</p>
+    <div class="strip" id="statStrip"></div>
+  </div>
+  <div class="cols c2 ruled" style="margin-top:22px">
+    <div>
+      <h3 style="font-size:20px">每場射門：熱刺 vs 對手</h3>
+      <svg id="shotChart" class="chart" viewBox="0 0 520 240" role="img" aria-label="每場射門數比較"></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>熱刺</span><span><i style="background:var(--muted);opacity:.5"></i>對手</span></div>
+    </div>
+    <div>
+      <h3 style="font-size:20px">進失球時間分布（每 15 分鐘）</h3>
+      <svg id="timeChart" class="chart" viewBox="0 0 520 240" role="img" aria-label="進球與失球的時間分布"></svg>
+      <div class="legend"><span><i style="background:var(--win)"></i>進球</span><span><i style="background:var(--loss)"></i>失球</span></div>
+    </div>
+  </div>
+
+  <div class="cols c3 ruled" style="margin-top:26px">
+    <div>
+      <h3 style="font-size:19px">主客場與前後半段</h3>
+      <table class="small" id="splitTable"></table>
+    </div>
+    <div>
+      <h3 style="font-size:19px">門將：<span id="gkName"></span></h3>
+      <table class="small" id="gkTable"></table>
+    </div>
+    <div>
+      <h3 style="font-size:19px">單場極值</h3>
+      <ul class="newslist" id="extremes"></ul>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>球員數據表</h2>
+    <p class="dek">點表頭排序。先發次數由各場先發名單統計，進球、助攻依 ESPN 與賽後報導。</p>
+    <div class="tbl-wrap"><table id="ptable">
+      <thead><tr><th><button data-k="zh">球員</button></th><th><button data-k="pos">位置</button></th><th class="r"><button data-k="st" aria-sort="descending">先發</button></th><th class="r"><button data-k="g">進球</button></th><th class="r"><button data-k="a">助攻</button></th><th class="r"><button data-k="ga">進球+助攻</button></th><th class="r"><button data-k="gr">評分</button></th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <p class="tiny muted">另有 1 球是切爾西門將 Penders 的烏龍球，所以球員進球加總比球隊總進球少 1。</p>
+  </div>
+
+  <div class="cols c12 ruled" style="margin-top:6px">
+    <div class="sec" style="border-top:0">
+      <h3 style="font-size:19px">誰最會防守（每 90 分鐘）</h3>
+      <div class="tbl-wrap"><table class="small" id="defTable"><thead><tr><th>球員</th><th class="r">搶斷</th><th class="r">攔截</th><th class="r">解圍</th><th class="r">奪回球權</th></tr></thead><tbody></tbody></table></div>
+      <p class="tiny muted">資料：TottenhamLive 整理之英超官方數據。上場時間少的球員數字波動大。</p>
+    </div>
+    <div class="sec" style="border-top:0">
+      <h3 style="font-size:19px">英超積分榜</h3>
+      <div class="tbl-wrap"><table class="small" id="league"><thead><tr><th>#</th><th>球隊</th><th class="r">勝</th><th class="r">和</th><th class="r">負</th><th class="r">積分</th><th>和熱刺比</th></tr></thead><tbody></tbody></table></div>
+      <p class="tiny muted">前 4 名進歐冠，18 到 20 名降級。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 轉會與財務 ===== -->
+<section class="view" id="v-market" aria-label="轉會與財務">
+  <div class="sec">
+    <div class="kick">市場分析</div>
+    <h2 style="font-size:32px;margin:4px 0 8px">一次砸到底的重建，帳要怎麼算</h2>
+    <div class="strip" style="grid-template-columns:repeat(3,1fr)">
+      <div><div class="n">£3.8 億</div><div class="l">10 名新援總投入（英國媒體統計）</div></div>
+      <div><div class="n">£1.42 億</div><div class="l">賣球員收回（嘻嘻加總估算）</div></div>
+      <div><div class="n">≈ £2.4 億</div><div class="l">淨支出</div></div>
+    </div>
+    <div class="cols c2 ruled body" style="margin-top:20px">
+      <div>
+        <p>兩季都排第 17 之後，熱刺的老闆選擇不再慢慢來。中場花了約 1.78 億（Tonali、Fernandes 兩筆都破隊史紀錄），鋒線約 1.35 億，後防只花了 6,200 萬，再撿了 Robertson、Senesi、Dubravka 三個自由球員。</p>
+        <p>這個分配很有德澤爾比的味道：他的足球靠中場控制，所以中場先買最好的。問題是買來的前鋒還沒交出東西。</p>
+      </div>
+      <div>
+        <p>要注意的是未來的帳。2027 年夏天要付給曼城 6,000 萬英鎊強制買斷 Marmoush，Savio 和 Tonali 的附加條款最多還有 1,750 萬。Tonali 的週薪據報約 27.5 萬英鎊，躋身隊內最高薪。</p>
+        <p>能回收的錢反而不確定：Danso 約 2,250 萬的買斷要桑德蘭保級才算數，Sarr 那筆約 2,400 萬尤文可以不買。這季打不進歐戰的話，英超的<button class="term" data-tip="獲利與可持續性規則：限制俱樂部三年內的虧損上限，超過可能被扣分。">財務規則</button>會讓冬窗只能先賣後買。</p>
+      </div>
+    </div>
+  </div>
+  <div class="cols c2 ruled" style="margin-top:12px">
+    <div>
+      <h3 style="font-size:20px">新援花費（初始轉會費）</h3>
+      <svg id="spendChart" class="chart" viewBox="0 0 520 280" role="img" aria-label="2026 夏窗各新援轉會費"></svg>
+      <p class="tiny muted">* Marmoush 為租借加<button class="term" data-tip="租借結束後，買方一定要用約定價格買下球員。">強制買斷</button>，以 6,000 萬計。Mudryk 是租借加<button class="term" data-tip="租借結束後，買方可以選擇要不要買，不買就歸還。">選擇買斷</button>。</p>
+    </div>
+    <div>
+      <h3 style="font-size:20px">可能回收的錢</h3>
+      <table class="small">
+        <tr><td>Danso → 桑德蘭</td><td class="r num">約 £2,250 萬</td><td class="muted">桑德蘭保級才觸發，對方目前第 19</td></tr>
+        <tr><td>Sarr → 尤文圖斯</td><td class="r num">約 £2,400 萬</td><td class="muted">選擇買斷</td></tr>
+        <tr><td>Dragusin → 佛倫提那</td><td class="r">未公開</td><td class="muted">符合條件才轉永久</td></tr>
+        <tr><td>Vicario → 尤文圖斯</td><td class="r">—</td><td class="muted">單純租借</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>夏窗進出</h2>
+    <div class="cols c2 ruled">
+      <div>
+        <h3 style="font-size:19px">進來 10 人</h3>
+        <div class="tbl-wrap"><table class="small">
+          <thead><tr><th>球員</th><th>位置</th><th>來自</th><th class="r">費用</th></tr></thead>
+          <tbody>
+            <tr><td>Sandro Tonali</td><td>中場</td><td>紐卡索</td><td class="r num">£9,250 萬（最高 1 億）</td></tr>
+            <tr><td>Mateus Fernandes</td><td>中場</td><td>西漢姆</td><td class="r num">£8,500 萬</td></tr>
+            <tr><td>Savio</td><td>邊鋒</td><td>曼城</td><td class="r num">£7,500 萬（最高 8,500 萬）</td></tr>
+            <tr><td>Omar Marmoush</td><td>前鋒</td><td>曼城</td><td class="r num">租借＋£6,000 萬強制買斷</td></tr>
+            <tr><td>Jan-Paul van Hecke</td><td>中後衛</td><td>布萊頓</td><td class="r num">£5,200 萬</td></tr>
+            <tr><td>Tosin Adarabioyo</td><td>中後衛</td><td>切爾西</td><td class="r num">£1,000 萬（＋200 萬）</td></tr>
+            <tr><td>Mykhaylo Mudryk</td><td>邊鋒</td><td>切爾西</td><td class="r">租借，附選擇買斷</td></tr>
+            <tr><td>Andy Robertson</td><td>左後衛</td><td>利物浦</td><td class="r">自由轉會</td></tr>
+            <tr><td>Marcos Senesi</td><td>中後衛</td><td>伯恩茅斯</td><td class="r">自由轉會</td></tr>
+            <tr><td>Martin Dubravka</td><td>門將</td><td>伯恩利</td><td class="r">自由轉會</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div>
+        <h3 style="font-size:19px">離開的主要球員</h3>
+        <div class="tbl-wrap"><table class="small">
+          <thead><tr><th>球員</th><th>去向</th><th class="r">費用</th></tr></thead>
+          <tbody>
+            <tr><td>Luka Vušković</td><td>布萊頓</td><td class="r num">£4,600 萬</td></tr>
+            <tr><td>Cristian Romero</td><td>馬德里競技</td><td class="r num">£3,420 萬</td></tr>
+            <tr><td>Djed Spence</td><td>國際米蘭</td><td class="r num">£2,570 萬</td></tr>
+            <tr><td>Will Lankshear</td><td>米德斯堡</td><td class="r num">£1,000 萬</td></tr>
+            <tr><td>Alejo Véliz</td><td>巴伊亞</td><td class="r num">£770 萬</td></tr>
+            <tr><td>Ashley Phillips</td><td>米德斯堡</td><td class="r num">£700 萬</td></tr>
+            <tr><td>Alfie Devine</td><td>普雷斯頓</td><td class="r num">約 £600 萬</td></tr>
+            <tr><td>Manor Solomon</td><td>西漢姆</td><td class="r num">£500 萬</td></tr>
+            <tr><td>Sarr、Vicario</td><td>尤文圖斯</td><td class="r">租借</td></tr>
+            <tr><td>Kevin Danso</td><td>桑德蘭</td><td class="r">租借（條件式買斷）</td></tr>
+            <tr><td>Yves Bissouma</td><td>—</td><td class="r">合約到期</td></tr>
+          </tbody>
+        </table></div>
+        <p class="tiny muted">另有 Dragusin、Takai、Souza、梁敏赫、Melia 等外租。賣掉 Romero 和 Vušković 兩個中衛，換來 van Hecke，是這個夏天最大膽的一步。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>冬窗傳聞追蹤</h2>
+    <p class="dek">主軸只有一個：找一個能進球的中鋒。報導說俱樂部可能先賣人籌錢，但 1 月很難做成天價交易。可信度是嘻嘻看消息來源和交易條件後的判斷。</p>
+    <div class="tbl-wrap"><table class="small" id="rumourTable"><thead><tr><th>球員</th><th>位置 / 現屬</th><th>目前聽到的</th><th>可信度</th></tr></thead><tbody></tbody></table></div>
+    <div class="box" style="margin-top:16px">
+      <h3>如果我是體育總監</h3>
+      <p class="small" style="margin:0">先賣 Richarlison，把 Savio 的定位講清楚，然後把錢集中在一個熟悉英超、會在禁區裡找位置的中鋒。Mateta 是最現實的選項：價格可控、英超經驗夠、身體能扛。Roberto Fernández 比較年輕，潛力大但要適應。Gibbs-White 很好，但 1 月花 1 億多買一個不是中鋒的人，解決不了現在的問題。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 專欄 ===== -->
+<section class="view" id="v-columns" aria-label="專欄">
+  <div class="sec">
+    <h2>所有文章</h2>
+    <p class="dek">嘻嘻寫的每一篇，最新的在最上面。歡迎轉貼討論，記得附上連結。</p>
+    <div class="cols c2" id="colList" style="gap:0 36px"></div>
+  </div>
+</section>
+
+<!-- ===== 小教室 ===== -->
+<section class="view" id="v-glossary" aria-label="小教室">
+  <div class="sec">
+    <h2>小教室</h2>
+    <p class="dek">看球、看數據常見的詞，第一次看英超的朋友可以從這裡開始。</p>
+    <dl class="gloss">
+      <dt>xG 預期進球</dt><dd>依射門的位置、角度和方式，估算這腳球「平均會進幾球」。禁區內正面空門大約 0.7，遠射大約 0.03。整隊加總就能看出創造機會的品質。</dd>
+      <dt>xGOT</dt><dd>射正球的預期進球，把射門落點也算進去。拿來評估門將：xGOT 很高卻沒失球，代表門將撲得好。</dd>
+      <dt>射正</dt><dd>射門方向在球門框內，被撲出或進球都算。打中門柱、射偏、被後衛擋下都不算。</dd>
+      <dt>零封</dt><dd>整場沒失球，英文 clean sheet。</dd>
+      <dt>每 90 分鐘</dt><dd>把數據換算成「踢滿一場平均多少」，上場時間不同的球員才能放在一起比。</dd>
+      <dt>誘壓</dt><dd>德澤爾比的招牌：後場故意慢慢傳，把對手引上來壓迫，再趁對方陣型拉開時快速傳過去。</dd>
+      <dt>最後腰</dt><dd>站在後衛線前面、中場最深的位置，負責接後衛的球再往前送，也負責第一道防守。</dd>
+      <dt>定位球</dt><dd>角球、自由球、界外球、點球等比賽暫停後的重新開始。</dd>
+      <dt>北倫敦德比</dt><dd>熱刺對兵工廠。兩隊同在倫敦北區，是英格蘭最有歷史的宿敵對決之一。</dd>
+      <dt>國際賽週</dt><dd>各國國家隊比賽的期間，英超會暫停。</dd>
+      <dt>強制買斷 / 選擇買斷</dt><dd>租借附帶的條款。強制買斷是租借結束一定要買；選擇買斷是可以決定買不買。</dd>
+      <dt>附加條款</dt><dd>轉會費裡要達成出場數、球隊成績等條件才付的額外金額。</dd>
+      <dt>財務規則（PSR）</dt><dd>英超限制俱樂部一段期間內虧損的規則，超標可能被扣分。</dd>
+      <dt>VAR</dt><dd>影像助理裁判，可以建議主裁重看進球、點球、紅牌和認錯人。</dd>
+    </dl>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong style="color:var(--ink)">關於本站：</strong>台灣熱刺迷自製的賽季筆記，非熱刺官方網站，與托特納姆熱刺足球俱樂部無關。數字資料每 6 小時自動檢查更新；評分、預測與「可信度」是嘻嘻的主觀判斷。轉會金額為媒體報導數字。</p>
+    <p class="num" id="footFresh"></p>
+    <h3 style="font-size:16px;color:var(--ink);margin-top:12px">資料來源</h3>
+    <ol>
+      <li>比賽數據、先發名單、積分榜、賽程、勝率：Sportradar</li>
+      <li>進球與助攻：<a href="https://www.espn.com/soccer/team/stats/_/id/367/tottenham-hotspur">ESPN</a>；比賽報導：<a href="https://www.footballwebpages.co.uk/match/2026-2027/premier-league/tottenham-hotspur/aston-villa/566590">維拉</a>、<a href="https://101greatgoals.com/football/premier-league/manchester-united-tottenham-report-result-goals">曼聯</a>、<a href="https://www.skysports.com/football/spurs-vs-coventry/report/559513">考文垂</a>、<a href="https://www.footballwebpages.co.uk/match/2026-2027/premier-league/chelsea/tottenham-hotspur/566613">切爾西</a>、<a href="https://www.skysports.com/football/spurs-vs-c-palace/report/559533">水晶宮</a></li>
+      <li>戰術：<a href="https://theanalyst.com/?p=266116">Opta Analyst</a>、<a href="https://totalfootballanalysis.com/tactical-analysis/de-zerbi-system-tottenham-struggles">Total Football Analysis</a></li>
+      <li>門將與防守：<a href="https://fbref.com/en/squads/361ca564/Tottenham-Hotspur-Stats">FBref</a>、<a href="https://tottenhamlive.com/tottenham-player-stats">TottenhamLive</a>；xG：<a href="https://www.fotmob.com/leagues/47/stats/season/36781/teams/expected_goals_team/premier-league">FotMob</a>、<a href="https://www.squawka.com/en/features/premier-league-xg-table/">Squawka</a></li>
+      <li>轉會與財務：<a href="https://www.teamtalk.com/tottenham-hotspur/every-completed-tottenham-transfer-summer-2026-signings-sales-loans">TEAMtalk</a>、<a href="https://www.irishnews.com/sport/soccer/roberto-de-zerbi-credits-team-spirit-for-tottenhams-turnaround-52UXG3L3R5I65DMLWYM6K3NKDY/">PA</a>、<a href="https://www.thestar.com.my/sport/football/2026/07/06/soccer-spurs-sign-tonali-for-a-club-record-100-million">Reuters</a>、<a href="https://hirunews.lk/english/sports/485181/tottenham-agree-loan-for-man-citys-marmoush">Marmoush 買斷</a>、<a href="https://www.dawan.africa/news/tottenham-agree-record-pound100m-tonali-deal">Tonali 週薪</a></li>
+      <li>冬窗傳聞：<a href="https://www.teamtalk.com/tottenham-hotspur/striker-signing-january-spurs-sacrifice-players-de-zerbi-sack-decision">TEAMtalk</a>、<a href="https://www.sportsmole.co.uk/football/spurs/transfer-talk/news/spurs-in-race-with-villa-for-gbp26m-striker-but-deadline-day-alters-plans_604237.html">Sports Mole</a>、<a href="https://thehardtackle.com/?p=769049">The Hard Tackle</a>、<a href="https://www.livescore.com/en/news/football/premier-league/tottenham-eye-stunning-125m-swoop-for-england-star-morgan-gibbs-white-as-roberto-de-zerbi-seeks-creative-spark-goal/">GOAL</a></li>
+      <li>轉播：愛爾達 2026-27 足球轉播公告（<a href="https://www.ptt.cc/bbs/MOD/M.1785812303.A.ACA.html">PTT MOD 板</a>）</li>
+    </ol>
+  </div>
+</footer>
+<div id="tip" role="tooltip"></div>
+<div id="modal" role="dialog" aria-modal="true" aria-label="賽後圖卡"><div class="in"><img id="modalImg" alt="賽後圖卡"><p class="small" style="margin:10px 0 8px">手機請長按圖片儲存，電腦請按右鍵「另存圖片」。</p><button class="btn" type="button" id="modalClose">關閉</button></div></div>
+
+<script>
+(function(){
+  function J(id){try{return JSON.parse(document.getElementById(id).textContent)}catch(e){return null}}
+  var C=J("data-core")||{},M=J("data-matches")||[],P=J("data-players")||[],A=J("data-articles")||{articles:[]};
+  var SITE="https://owencbasket-pixel.github.io/xixi-spurs.github.io/";
+  var ZH={W:"勝",D:"和",L:"負"};
+  function res(m){return m.f>m.a?"W":(m.f<m.a?"L":"D")}
+  function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+  function $(id){return document.getElementById(id)}
+  function fmtT(iso){var d=new Date(iso);if(isNaN(d))return"–";var t=new Date(d.getTime()+8*36e5);return (t.getUTCMonth()+1)+"/"+t.getUTCDate()+" "+String(t.getUTCHours()).padStart(2,"0")+":"+String(t.getUTCMinutes()).padStart(2,"0")}
+  function wk(iso){var t=new Date(new Date(iso).getTime()+8*36e5);return "日一二三四五六"[t.getUTCDay()]}
+  function dur(ms){if(ms<0)return"已開賽";var d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5);return d>0?d+" 天 "+h+" 小時":h+" 小時"}
+
+  /* ---- totals ---- */
+  var T={W:0,D:0,L:0,gf:0,ga:0,s:0,os:0,st:0,ost:0,p:0,cs:0,pts:0};
+  M.forEach(function(m){var r=res(m);T[r]++;T.gf+=m.f;T.ga+=m.a;T.s+=m.s;T.os+=m.os;T.st+=m.st;T.ost+=m.ost;T.p+=m.p;if(m.a===0)T.cs++;T.pts+=r==="W"?3:r==="D"?1:0});
+  var N=M.length||1, rank=(C.standings||[]).findIndex(function(t){return t[0]==="熱刺"})+1;
+
+
+  /* ---- original generated artwork (no photos) ---- */
+  function hash(str){var h=2166136261;for(var i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+  function rng(seed){var a=hash(String(seed));return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+  var KIND={"戰術":"tac","進攻":"shots","比賽節奏":"clock","定位球":"corner","財務":"bars","賽程":"cal","lead":"lead"};
+  function art(seed,kick,w,h,cls){
+    var R=rng(seed),k=KIND[kick]||"shots",o=[],NAVY="#132257",ACC="#6f8fff",WH="#ffffff",GR="#5fe09a",RD="#ff7a7a";
+    o.push('<rect width="'+w+'" height="'+h+'" fill="'+NAVY+'"/>');
+    /* faint pitch */
+    var px=w*.06,py=h*.1,pw=w*.88,ph=h*.8,ln='stroke="'+WH+'" stroke-opacity=".13" fill="none" stroke-width="2"';
+    o.push('<rect x="'+px+'" y="'+py+'" width="'+pw+'" height="'+ph+'" '+ln+'/><line x1="'+(px+pw/2)+'" y1="'+py+'" x2="'+(px+pw/2)+'" y2="'+(py+ph)+'" '+ln+'/><circle cx="'+(px+pw/2)+'" cy="'+(py+ph/2)+'" r="'+(ph*.18)+'" '+ln+'/><rect x="'+(px+pw-pw*.16)+'" y="'+(py+ph*.22)+'" width="'+(pw*.16)+'" height="'+(ph*.56)+'" '+ln+'/><rect x="'+px+'" y="'+(py+ph*.22)+'" width="'+(pw*.16)+'" height="'+(ph*.56)+'" '+ln+'/>');
+    if(k==="shots"){for(var i=0;i<34;i++){var x=px+pw*(.55+R()*.42),y=py+ph*(.12+R()*.76),r=4+R()*10,g=R()<.14;o.push('<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+r.toFixed(1)+'" fill="'+(g?ACC:"none")+'" stroke="'+(g?ACC:WH)+'" stroke-opacity="'+(g?1:.55)+'" stroke-width="2"/>')}}
+    else if(k==="tac"){var pos=[[.08,.5],[.25,.15],[.22,.38],[.22,.62],[.25,.85],[.4,.5],[.5,.32],[.62,.62],[.78,.2],[.82,.5],[.78,.8]];
+      pos.forEach(function(p,i){if(i<10){var q=pos[i+1];o.push('<path d="M'+(px+pw*p[0])+' '+(py+ph*p[1])+' Q '+(px+pw*(p[0]+q[0])/2)+' '+(py+ph*(R()))+' '+(px+pw*q[0])+' '+(py+ph*q[1])+'" stroke="'+ACC+'" stroke-width="2.5" fill="none" stroke-opacity=".7"/>')}});
+      pos.forEach(function(p,i){o.push('<circle cx="'+(px+pw*p[0])+'" cy="'+(py+ph*p[1])+'" r="11" fill="'+(i===5?ACC:WH)+'"/>')})}
+    else if(k==="clock"){var F=[0,0,0,0,0,0];M.forEach(function(m){(m.gf||[]).forEach(function(x){F[x<=15?0:x<=30?1:x<=45?2:x<=60?3:x<=75?4:5]++})});
+      var cx=w*.5,cy=h*.5,mx=Math.max.apply(null,F)||1;for(var j=0;j<6;j++){var a0=-Math.PI/2+j*Math.PI/3+.04,a1=a0+Math.PI/3-.08,rr=h*.14+h*.24*(F[j]/mx);
+        o.push('<path d="M'+cx+' '+cy+' L'+(cx+rr*Math.cos(a0))+' '+(cy+rr*Math.sin(a0))+' A'+rr+' '+rr+' 0 0 1 '+(cx+rr*Math.cos(a1))+' '+(cy+rr*Math.sin(a1))+' Z" fill="'+(j===5?ACC:WH)+'" fill-opacity="'+(j===5?1:.22)+'"/>')}
+      o.push('<circle cx="'+cx+'" cy="'+cy+'" r="'+(h*.06)+'" fill="'+NAVY+'"/>')}
+    else if(k==="corner"){var cx2=px+pw,cy2=py;for(var c=0;c<7;c++){var tx=px+pw*(.8+R()*.12),ty=py+ph*(.3+R()*.4);o.push('<path d="M'+cx2+' '+cy2+' Q '+(cx2-pw*(.1+R()*.15))+' '+(py+ph*(.05+R()*.2))+' '+tx+' '+ty+'" stroke="'+(c<3?ACC:WH)+'" stroke-opacity="'+(c<3?.95:.35)+'" stroke-width="2.5" stroke-dasharray="7 6" fill="none"/>');o.push('<circle cx="'+tx+'" cy="'+ty+'" r="'+(c<3?9:5)+'" fill="'+(c<3?ACC:WH)+'" fill-opacity="'+(c<3?1:.5)+'"/>')}
+      o.push('<path d="M'+(cx2-20)+' '+cy2+' A20 20 0 0 0 '+cx2+' '+(cy2+20)+'" '+ln+'/>')}
+    else if(k==="bars"){var V=[92.5,85,75,60,52,10],bw=pw/(V.length*1.7);V.forEach(function(v,i){var bh=ph*.85*v/100,x=px+pw*.12+i*bw*1.6;o.push('<rect x="'+x+'" y="'+(py+ph-bh)+'" width="'+bw+'" height="'+bh+'" fill="'+(i<2?ACC:WH)+'" fill-opacity="'+(i<2?1:.3)+'"/>')})}
+    else if(k==="cal"){var cells=M.map(function(m){return res(m)}).concat((C.fixtures||[]).map(function(){return "F"})),cw=pw/10,ch=ph/3.2;
+      cells.slice(0,20).forEach(function(r,i){var x=px+(i%10)*cw+6,y=py+Math.floor(i/10)*ch*1.2+ph*.2;o.push('<rect x="'+x+'" y="'+y+'" width="'+(cw-12)+'" height="'+(ch-12)+'" fill="'+(r==="W"?GR:r==="L"?RD:r==="D"?"#aab0c8":"none")+'" stroke="'+WH+'" stroke-opacity="'+(r==="F"?.45:0)+'" stroke-width="2"/>')})}
+    else{var cum=[],c3=0;M.forEach(function(m){var x=res(m);c3+=x==="W"?3:x==="D"?1:0;cum.push(c3)});var mxp=Math.max(15,c3+3);
+      var d="";cum.forEach(function(v,i){d+=(i?"L":"M")+(px+pw*i/Math.max(1,cum.length-1))+" "+(py+ph-ph*v/mxp)});
+      for(var s2=0;s2<9;s2++)o.push('<rect x="'+(px+pw*s2/9)+'" y="'+py+'" width="'+(pw/18)+'" height="'+ph+'" fill="'+WH+'" fill-opacity=".03"/>');
+      o.push('<path d="'+d+'" stroke="'+ACC+'" stroke-width="5" fill="none" stroke-linejoin="round"/>');
+      cum.forEach(function(v,i){var r=res(M[i]);o.push('<circle cx="'+(px+pw*i/Math.max(1,cum.length-1))+'" cy="'+(py+ph-ph*v/mxp)+'" r="8" fill="'+(r==="W"?GR:r==="L"?RD:"#aab0c8")+'"/>')})}
+    return '<svg class="art '+(cls||"")+'" viewBox="0 0 '+w+' '+h+'" role="img" aria-label="本文配圖：依熱刺本季資料繪製的示意插畫" preserveAspectRatio="xMidYMid slice">'+o.join("")+'</svg>';
+  }
+  /* ---- freshness ---- */
+  if(C.meta){$("freshness").innerHTML='<i></i>最後更新 '+esc(fmtT(C.meta.updated))+' · 每 6 小時自動檢查';
+    $("footFresh").textContent="內容更新："+fmtT(C.meta.updated)+"　自動檢查："+fmtT(C.meta.checked)+"（台北時間）";}
+
+  /* ---- lead & articles ---- */
+  var POSTS=[];
+  if(A.lead){POSTS.push({id:"lead",date:A.lead.date,kick:A.lead.kick,title:A.lead.title,dek:A.lead.stand,body:A.lead.body,isLead:true})}
+  (A.articles||[]).forEach(function(a){POSTS.push(a)});
+  function rmin(b){var n=(b||[]).join("").length;return Math.max(1,Math.round(n/450))}
+  function feedItem(a){return '<a class="feeditem" href="#a-'+esc(a.id)+'">'+art(a.id==="lead"?"lead-"+a.title:a.id,a.isLead?"lead":a.kick,800,450)+'<div><div class="kick">'+esc(a.kick)+'</div><h3>'+esc(a.title)+'</h3><p>'+esc(a.dek||"")+'</p><div class="meta2" style="margin-top:6px">文／嘻嘻 · '+esc(a.date)+' · '+rmin(a.body)+' 分鐘讀完</div></div></a>'}
+  if(A.lead){var L=A.lead;$("leadStory").innerHTML=art("lead-"+L.title,"lead",800,400,"leadart")+'<div class="kick">'+esc(L.kick)+'</div><h2 style="font-size:clamp(28px,4vw,40px);margin:6px 0 10px">'+esc(L.title)+'</h2><div class="stand" style="font-size:18px;color:var(--muted);margin-bottom:10px">'+esc(L.stand)+'</div><div class="meta2">文／嘻嘻 · '+esc(L.date)+' · '+rmin(L.body)+' 分鐘讀完 · <span style="color:var(--accent)">閱讀全文 →</span></div>';}
+  $("feed").innerHTML=POSTS.filter(function(a){return !a.isLead}).slice(0,6).map(feedItem).join("");
+  $("colList").innerHTML=POSTS.map(feedItem).join("");
+  $("colList").style.display="block";
+  function renderPost(id){
+    var a=POSTS.filter(function(x){return x.id===id})[0];
+    if(!a){$("postBody").innerHTML='<p class="muted">找不到這篇文章，可能已經下架了。<a href="#columns">看所有文章</a></p>';$("postMore").innerHTML="";return}
+    $("postBody").innerHTML='<div class="kick">'+esc(a.kick)+'</div><h1>'+esc(a.title)+'</h1><div class="stand">'+esc(a.dek||"")+'</div><div class="by"><div class="avatar" aria-hidden="true">嘻</div><div><div style="font-weight:700">嘻嘻</div><div class="meta2">'+esc(a.date)+' · '+rmin(a.body)+' 分鐘讀完</div></div><button class="sharebtn" type="button" id="postShare">複製文章連結</button></div>'+art(a.id==="lead"?"lead-"+a.title:a.id,a.isLead?"lead":a.kick,800,400)+'<div class="body">'+a.body.map(function(x,i){return '<p'+(i===0?' class="drop"':'')+'>'+esc(x)+'</p>'}).join("")+'<p class="endsig">（嘻嘻）</p></div>';
+    $("postMore").innerHTML=POSTS.filter(function(x){return x.id!==id}).slice(0,3).map(feedItem).join("");
+    var sb=$("postShare");if(sb)sb.addEventListener("click",function(){copy(SITE+"#a-"+id,"文章連結已複製")});
+  }
+
+
+  /* ---- next match ---- */
+  var nx=C.next;
+  function tickNext(){if(!nx)return;var ms=new Date(nx.iso)-Date.now();$("nxCountdown").textContent=ms>0?"還有 "+dur(ms):"比賽進行中或已結束";}
+  if(nx){
+    $("nxTitle").textContent=(nx.ha==="主"?"熱刺 vs "+nx.opp:nx.opp+" vs 熱刺");
+    $("nxWhen").textContent="英超第 "+nx.round+" 輪 · "+fmtT(nx.iso)+"（"+wk(nx.iso)+"）台北時間 · "+(nx.ha==="主"?"熱刺主場":"客場");
+    tickNext();setInterval(tickNext,60000);
+    var pr=nx.prob||[];$("nxProb").innerHTML='<div style="display:flex;height:8px;overflow:hidden" role="img" aria-label="勝率預測：熱刺勝 '+pr[0]+'%，和 '+pr[1]+'%，對手勝 '+pr[2]+'%"><span style="width:'+pr[0]+'%;background:var(--accent)"></span><span style="width:'+pr[1]+'%;background:var(--draw)"></span><span style="width:'+pr[2]+'%;background:var(--loss)"></span></div><div class="tiny muted num" style="display:flex;justify-content:space-between;margin-top:3px"><span>熱刺勝 '+pr[0]+'%</span><span>和 '+pr[1]+'%</span><span>'+esc(nx.opp)+'勝 '+pr[2]+'%</span></div>';
+    var spForm=M.slice(-5).map(function(m){var r=res(m);return '<span class="pill '+r+'">'+ZH[r]+'</span>'}).join("");
+    var opForm=String(nx.oppForm||"").split("").map(function(r){return '<span class="pill '+r+'">'+ZH[r]+'</span>'}).join("");
+    $("nxTable").innerHTML='<tr><th></th><th>熱刺</th><th>'+esc(nx.opp)+'</th></tr><tr><td>排名</td><td>'+rank+' 名 / '+T.pts+' 分</td><td>'+nx.oppRank+' 名 / '+nx.oppPts+' 分</td></tr><tr><td>近 5 場</td><td><span class="form">'+spForm+'</span></td><td><span class="form">'+opForm+'</span></td></tr><tr><td>進 : 失</td><td class="num">'+T.gf+' : '+T.ga+'</td><td class="num">'+nx.oppGF+' : '+nx.oppGA+'</td></tr>';
+    $("nxPreview").innerHTML=(nx.preview||[]).map(function(p){return '<p>'+esc(p)+'</p>'}).join("");
+  }
+  $("newsList").innerHTML=(C.news||[]).map(function(n){return '<li><span class="d">'+esc(n[0])+'</span><span>'+esc(n[1])+'</span></li>'}).join("");
+
+  /* ---- strips ---- */
+  var gapUp=(C.standings&&C.standings[4])?C.standings[4][4]-T.pts:0, gapDown=(C.standings&&C.standings[17])?T.pts-C.standings[17][4]:0;
+  $("homeStrip").innerHTML=[
+    [rank,"聯賽排名（20 隊）"],[T.pts+" 分",T.W+" 勝 "+T.D+" 和 "+T.L+" 負"],[T.gf+" : "+T.ga,"進球 : 失球"],["差 "+gapUp,"與第 5 名的距離"],["+"+gapDown,"領先降級區"]
+  ].map(function(x){return '<div><div class="n">'+esc(x[0])+'</div><div class="l">'+esc(x[1])+'</div></div>'}).join("");
+  var adv=C.adv||{};
+  $("statStrip").innerHTML=[
+    [(T.p/N).toFixed(1)+"%","平均控球率"],
+    [(T.s/N).toFixed(1),"每場射門（對手 "+(T.os/N).toFixed(1)+"）"],
+    [(T.gf/T.s*100).toFixed(1)+"%",'<button class="term" data-tip="進球除以射門次數，越高代表越會把機會變成進球。">射門轉換率</button>（對手 '+(T.ga/T.os*100).toFixed(1)+'%）',1],
+    [adv.xg!=null?adv.xg:"–",'<button class="term" data-tip="預期進球：依每腳射門的位置、角度估算平均會進幾球，再全部加總。實際進球比 xG 少，通常代表終結能力不足或運氣不好。">xG 預期進球</button>（實際 '+T.gf+'，聯盟第 '+(adv.xgRank||"–")+'）',1],
+    [T.cs,'<button class="term" data-tip="整場沒有失球。">零封</button>場次',1]
+  ].map(function(x){return '<div><div class="n">'+esc(x[0])+'</div><div class="l">'+(x[2]?x[1]:esc(x[1]))+'</div></div>'}).join("");
+
+  /* ---- matches ---- */
+  function sbar(k,a,b){var t=(a+b)||1;return '<div class="sb"><span class="k">'+k+'</span><span class="num">'+a+'</span><span class="bar"><i style="width:'+(a/t*100)+'%"></i><b style="width:'+(b/t*100)+'%"></b></span><span class="num r">'+b+'</span></div>'}
+  function mTitle(m){return m.h==="主"?"熱刺 "+m.f+" : "+m.a+" "+m.o:m.o+" "+m.a+" : "+m.f+" 熱刺"}
+  function renderMatches(f){
+    var h="",rev=M.slice().reverse();
+    rev.forEach(function(m,i){var R=res(m);if(f!=="all"&&f!==R&&f!==m.h)return;
+      h+='<details class="match"'+(i===0&&f==="all"?" open":"")+'><summary><span class="pill '+R+'">'+ZH[R]+'</span><div><div class="sc num">'+esc(mTitle(m))+'</div><div class="meta">第 '+m.r+' 輪 · '+esc(m.d)+' · '+(m.h==="主"?"主場":"客場")+'</div></div><span class="hint">展開 ▾</span></summary><div class="body"><div><p style="margin:0 0 8px">'+esc(m.note)+'</p><ul class="ev">'+
+        m.ev.map(function(e){return '<li><b>'+esc(e[0])+'</b>'+esc(e[1])+(e[2]?' <span class="muted num">（熱刺 '+esc(e[2])+'）</span>':'')+'</li>'}).join("")+
+        '</ul><p class="tiny muted" style="margin:8px 0 6px">熱刺先發：'+esc(m.xi)+'</p><span class="cardbtns"><button class="chip" type="button" data-copy="'+(m.r)+'">複製賽後懶人包</button><button class="chip" type="button" data-card="'+(m.r)+'">下載賽後圖卡</button></span></div><div><div class="tiny muted" style="display:flex;justify-content:space-between"><span>熱刺</span><span>'+esc(m.o)+'</span></div>'+
+        sbar("控球率 %",m.p,100-m.p)+sbar("射門",m.s,m.os)+sbar("射正",m.st,m.ost)+sbar("角球",m.c,m.oc)+sbar("黃牌",m.y,m.oy)+'</div></div></details>'});
+    $("matchList").innerHTML=h||'<p class="muted">沒有符合條件的比賽。</p>';
+  }
+  renderMatches("all");
+  function chipGroup(attr,fn){document.querySelectorAll("["+attr+"]").forEach(function(b){b.addEventListener("click",function(){document.querySelectorAll("["+attr+"]").forEach(function(x){x.setAttribute("aria-pressed","false")});b.setAttribute("aria-pressed","true");fn(b.getAttribute(attr))})})}
+  chipGroup("data-mf",renderMatches);
+
+  /* ---- fixtures ---- */
+  var rk={};(C.standings||[]).forEach(function(t,i){rk[t[0]]=i+1});
+  $("fixTable").querySelector("tbody").innerHTML=(C.fixtures||[]).filter(function(f){return new Date(f[0])>Date.now()-3*36e5}).map(function(f){var big=f[1]==="兵工廠";return '<tr><td class="num">'+fmtT(f[0])+'（'+wk(f[0])+'）</td><td>'+(big?'<strong>'+esc(f[1])+'（北倫敦德比）</strong>':esc(f[1]))+'</td><td>'+esc(f[2])+'</td><td class="r num">'+(rk[f[1]]||"–")+'</td></tr>'}).join("");
+
+
+
+  /* ---- jersey avatars (no photos) ---- */
+  var PHOTOS={}; /* 例："Kudus":"img/kudus.jpg"，只放有使用權的照片 */
+  var NUMS={"Kinsky":31,"van Hecke":6,"van de Ven":37,"Robertson":3,"Porro":23,"Udogie":13,"Senesi":5,"Adarabioyo":4,"Davies":33,"Gray":14,"Tonali":16,"M. Fernandes":18,"Bentancur":30,"Gallagher":8,"Bergvall":15,"Maddison":10,"Kudus":20,"Marmoush":22,"Tel":11,"Solanke":19,"Savio":17,"Moore":47,"Richarlison":9,"Mudryk":27,"Dubravka":1};
+  function shirt(en,pos,size){var n=NUMS[en],gk=pos==="門將",body=gk?"#c8f04a":"#ffffff",trim=gk?"#1d2b1a":"#132257",txt=gk?"#1d2b1a":"#132257";
+    var sz=size||56;
+    return '<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 64 64" role="img" aria-label="'+esc(en)+(n?" 背號 "+n:"")+'" style="flex:none;display:block"><path d="M20 6 L26 4 Q32 9 38 4 L44 6 L58 16 L52 27 L46 24 L46 60 L18 60 L18 24 L12 27 L6 16 Z" fill="'+body+'" stroke="'+trim+'" stroke-width="2.2" stroke-linejoin="round"/><path d="M26 4 Q32 11 38 4" fill="none" stroke="'+trim+'" stroke-width="3"/><path d="M6 16 L12 27 M58 16 L52 27" stroke="'+trim+'" stroke-width="3"/><text x="32" y="'+(n>9?47:47)+'" text-anchor="middle" style="font-family:Barlow Condensed,sans-serif;font-weight:700;font-size:'+(n>9?22:24)+'px;fill:'+txt+'">'+(n||"")+'</text></svg>';
+  }
+
+  /* ---- auto ability radar ---- */
+  function radar(p){
+    var maxG=Math.max.apply(null,P.map(function(x){return x[4]}).concat([1])),maxA=Math.max.apply(null,P.map(function(x){return x[5]}).concat([1]));
+    var g=p[6],v=[p[3]/Math.max(1,N),p[4]/maxG,p[5]/maxA,g==null?0:Math.max(0,Math.min(1,(g-4)/5))],lab=["先發","進球","助攻","評分"];
+    var cx=55,cy=52,R=34,pts=[],ax=[],o=[];
+    for(var i=0;i<4;i++){var a=-Math.PI/2+i*Math.PI/2,x=cx+R*Math.cos(a),y=cy+R*Math.sin(a);ax.push([x,y,a]);pts.push((cx+R*Math.max(.06,v[i])*Math.cos(a)).toFixed(1)+","+(cy+R*Math.max(.06,v[i])*Math.sin(a)).toFixed(1))}
+    [1,.5].forEach(function(k){o.push('<polygon points="'+ax.map(function(q){return (cx+(q[0]-cx)*k).toFixed(1)+","+(cy+(q[1]-cy)*k).toFixed(1)}).join(" ")+'" fill="none" stroke="var(--rule)"/>')});
+    ax.forEach(function(q){o.push('<line x1="'+cx+'" y1="'+cy+'" x2="'+q[0].toFixed(1)+'" y2="'+q[1].toFixed(1)+'" stroke="var(--rule)"/>')});
+    o.push('<polygon points="'+pts.join(" ")+'" fill="var(--accent)" fill-opacity=".28" stroke="var(--accent)" stroke-width="2"/>');
+    var lp=[[cx,cy-R-6,"middle"],[cx+R+5,cy+4,"start"],[cx,cy+R+14,"middle"],[cx-R-5,cy+4,"end"]];
+    lp.forEach(function(l,i){o.push('<text x="'+l[0]+'" y="'+l[1]+'" text-anchor="'+l[2]+'" style="font-size:10px">'+lab[i]+'</text>')});
+    return '<svg class="radar" viewBox="-16 0 142 104" width="120" height="88" role="img" aria-label="'+esc(p[1])+'能力圖：先發 '+p[3]+' 場、'+p[4]+' 球、'+p[5]+' 助攻、評分 '+(g==null?"未評":g)+'" style="flex:none">'+o.join("")+'</svg>';
+  }
+  /* ---- tactics figure ---- */
+  (function(){var w=900,h=520,o=[],L='stroke="#fff" stroke-opacity=".55" fill="none" stroke-width="2"';
+    o.push('<rect width="'+w+'" height="'+h+'" fill="#17703f"/>');
+    for(var i=0;i<10;i++)o.push('<rect x="'+(i*w/10)+'" y="0" width="'+(w/20)+'" height="'+h+'" fill="#fff" fill-opacity=".035"/>');
+    o.push('<rect x="20" y="20" width="'+(w-40)+'" height="'+(h-40)+'" '+L+'/><line x1="'+w/2+'" y1="20" x2="'+w/2+'" y2="'+(h-20)+'" '+L+'/><circle cx="'+w/2+'" cy="'+h/2+'" r="62" '+L+'/><rect x="20" y="'+(h/2-120)+'" width="120" height="240" '+L+'/><rect x="'+(w-140)+'" y="'+(h/2-120)+'" width="120" height="240" '+L+'/>');
+    o.push('<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#ffe27a"/></marker></defs>');
+    var P={kin:[60,260,"Kinsky"],gray:[230,440,"Gray"],vhe:[170,330,"van Hecke"],vdv:[170,190,"van de Ven"],rob:[250,80,"Robertson"],fer:[330,260,"Fernandes"],ton:[440,340,"Tonali"],mad:[520,200,"Maddison / Tel"],kud:[690,430,"Kudus"],mar:[760,260,"Marmoush"],sav:[690,90,"左路"]};
+    function ar(a,b,dash,c){var p=P[a],q=P[b];o.push('<path d="M'+p[0]+' '+p[1]+' Q '+((p[0]+q[0])/2+(dash?0:18))+' '+((p[1]+q[1])/2-26)+' '+q[0]+' '+q[1]+'" stroke="'+(c||"#ffe27a")+'" stroke-width="3" fill="none" '+(dash?'stroke-dasharray="8 7" ':'')+'marker-end="url(#ah)" opacity=".95"/>')}
+    ar("kin","vhe");ar("vhe","fer");ar("vdv","fer");ar("fer","mad");ar("fer","kud");ar("ton","mar");
+    o.push('<path d="M230 440 Q 300 400 360 380" stroke="#fff" stroke-width="3" fill="none" stroke-dasharray="8 7" marker-end="url(#ah)"/>');
+    o.push('<path d="M250 80 Q 470 40 640 80" stroke="#fff" stroke-width="3" fill="none" stroke-dasharray="8 7" marker-end="url(#ah)"/>');
+    Object.keys(P).forEach(function(k){var p=P[k],hl=k==="fer";o.push('<circle cx="'+p[0]+'" cy="'+p[1]+'" r="'+(hl?17:14)+'" fill="'+(hl?"#ffe27a":"#fff")+'" stroke="#132257" stroke-width="3"/>');o.push('<text x="'+p[0]+'" y="'+(p[1]+(p[1]>400?-24:34))+'" text-anchor="middle" style="fill:#fff;font-size:15px;font-weight:700;paint-order:stroke;stroke:#0e4d2a;stroke-width:4px">'+p[2]+'</text>')});
+    o.push('<text x="'+(w-30)+'" y="'+(h-32)+'" text-anchor="end" style="fill:#fff;font-size:14px;opacity:.85">進攻方向 →</text>');
+    $("tacFig").innerHTML='<svg viewBox="0 0 '+w+' '+h+'" style="display:block;width:100%;height:auto" role="img" aria-label="熱刺常用站位與出球路線示意圖：Fernandes 站在最深的位置接中衛的球，再往前傳給前場；Gray 從右後衛內收，Robertson 從左路前插">'+o.join("")+'</svg>';
+  })();
+  /* ---- grades ---- */
+  function renderGrades(pos){
+    $("gradeList").innerHTML=P.filter(function(p){return pos==="all"||p[2]===pos}).map(function(p){
+      var g=p[6];return '<div class="prow">'+(PHOTOS[p[0]]?'<img class="photo" src="'+esc(PHOTOS[p[0]].src)+'" alt="'+esc(p[1])+'">':shirt(p[0],p[2]))+'<div><h4><span class="grade" style="font-size:24px;margin-right:8px;color:'+(g==null?"var(--muted)":g>=7.5?"var(--win)":g<6?"var(--loss)":"var(--ink)")+'">'+(g==null?"–":g)+'</span>'+esc(p[1])+' <span class="muted small" style="font-family:var(--sans);font-weight:400">'+esc(p[0])+' · '+esc(p[2])+' · 先發 '+p[3]+' · '+p[4]+' 球 '+p[5]+' 助</span></h4><p>'+esc(p[7])+'</p>'+(PHOTOS[p[0]]&&PHOTOS[p[0]].credit?'<div class="tiny muted">照片：'+esc(PHOTOS[p[0]].credit)+'</div>':'')+'</div>'+radar(p)+'</div>'}).join("");
+  }
+  renderGrades("all");chipGroup("data-gf",renderGrades);
+
+  /* ---- player table ---- */
+  var sortK="st",sortDir=-1;
+  function renderPT(){
+    var rows=P.map(function(p){return{zh:p[1],en:p[0],pos:p[2],st:p[3],g:p[4],a:p[5],ga:p[4]+p[5],gr:p[6]==null?-1:p[6]}});
+    rows.sort(function(x,y){var a=x[sortK],b=y[sortK];if(typeof a==="string")return a.localeCompare(b,"zh-Hant")*sortDir;return (a-b)*sortDir||y.st-x.st});
+    $("ptable").querySelector("tbody").innerHTML=rows.map(function(p){return '<tr><td><span style="display:inline-flex;align-items:center;gap:8px">'+shirt(p.en,p.pos,28)+'<span><strong>'+esc(p.zh)+'</strong> <span class="muted small">'+esc(p.en)+'</span></span></span></td><td>'+p.pos+'</td><td class="r num">'+p.st+'</td><td class="r num">'+(p.g||"–")+'</td><td class="r num">'+(p.a||"–")+'</td><td class="r num"><strong>'+(p.ga||"–")+'</strong></td><td class="r num">'+(p.gr<0?"–":p.gr)+'</td></tr>'}).join("");
+  }
+  renderPT();
+  document.querySelectorAll("#ptable th button").forEach(function(b){b.addEventListener("click",function(){var k=b.getAttribute("data-k");if(sortK===k)sortDir=-sortDir;else{sortK=k;sortDir=(k==="zh"||k==="pos")?1:-1}document.querySelectorAll("#ptable th button").forEach(function(x){x.removeAttribute("aria-sort")});b.setAttribute("aria-sort",sortDir===1?"ascending":"descending");renderPT()})});
+
+  /* ---- splits / gk / extremes / defence / league / rumours ---- */
+  function agg(list){var o={W:0,D:0,L:0,gf:0,ga:0,pts:0};list.forEach(function(m){var r=res(m);o[r]++;o.gf+=m.f;o.ga+=m.a;o.pts+=r==="W"?3:r==="D"?1:0});return o}
+  var half=Math.ceil(N/2),sp=[["主場",agg(M.filter(function(m){return m.h==="主"}))],["客場",agg(M.filter(function(m){return m.h==="客"}))],["前 "+half+" 輪",agg(M.slice(0,half))],["後 "+(N-half)+" 輪",agg(M.slice(half))]];
+  $("splitTable").innerHTML='<tr><th></th><th class="r">勝-和-負</th><th class="r">進:失</th><th class="r">積分</th></tr>'+sp.map(function(s){var o=s[1];return '<tr><td>'+s[0]+'</td><td class="r num">'+o.W+'-'+o.D+'-'+o.L+'</td><td class="r num">'+o.gf+':'+o.ga+'</td><td class="r num"><strong>'+o.pts+'</strong></td></tr>'}).join("");
+  var gk=adv.gk;if(gk){$("gkName").textContent=gk.name;var gp=(gk.xgot-gk.conceded).toFixed(2);
+    $("gkTable").innerHTML='<tr><td><button class="term" data-tip="撲出的射正球除以面對的射正球。">撲救率</button></td><td class="r num"><strong>'+gk.savePct+'%</strong></td></tr><tr><td>撲救 / 面對射正</td><td class="r num">'+gk.saves+' / '+gk.sota+'</td></tr><tr><td>零封</td><td class="r num">'+gk.cs+'</td></tr><tr><td><button class="term" data-tip="射正球的預期進球（xGOT）減去實際失球。正數代表門將多擋下了球，負數代表失球比預期多。">阻止進球值</button></td><td class="r num" style="color:'+(gp<0?"var(--loss)":"var(--win)")+'"><strong>'+(gp>0?"+":"")+gp+'</strong></td></tr><tr><td colspan="2" class="tiny muted">統計至'+esc(gk.asOf)+'，出賽 '+gk.mins+' 分鐘</td></tr>';}
+  function maxBy(f){return M.reduce(function(a,b){return f(b)>f(a)?b:a},M[0])}
+  if(N>0){var e1=maxBy(function(m){return m.p}),e2=maxBy(function(m){return m.os}),e3=maxBy(function(m){return m.s}),e4=M.reduce(function(a,b){return b.st<a.st?b:a},M[0]);
+    $("extremes").innerHTML=[["控球",e1.p+"%，對"+e1.o],["射門",e3.s+" 腳，對"+e3.o],["被射",e2.os+" 腳，對"+e2.o],["射正",e4.st+" 腳，對"+e4.o+"（最少）"]].map(function(x){return '<li><span class="d" style="font-family:var(--sans);font-size:14px">'+x[0]+'</span><span class="num" style="font-size:16px">'+esc(x[1])+'</span></li>'}).join("");}
+  $("defTable").querySelector("tbody").innerHTML=(adv.def||[]).map(function(d){return '<tr><td>'+esc(d[0])+'</td><td class="r num">'+d[1]+'</td><td class="r num">'+d[2]+'</td><td class="r num">'+d[3]+'</td><td class="r num">'+d[4]+'</td></tr>'}).join("");
+  $("league").querySelector("tbody").innerHTML=(C.standings||[]).map(function(t,i){var gap=t[4]-T.pts,g=gap===0?"—":(gap>0?"多 "+gap+" 分":"少 "+(-gap)+" 分");var z=i<4?' <span class="tag2" style="border-color:var(--win);color:var(--win)">歐冠</span>':(i>=17?' <span class="tag2 hi">降級</span>':'');return '<tr'+(t[0]==="熱刺"?' class="me"':'')+'><td class="num">'+(i+1)+'</td><td>'+esc(t[0])+z+'</td><td class="r num">'+t[1]+'</td><td class="r num">'+t[2]+'</td><td class="r num">'+t[3]+'</td><td class="r num"><strong>'+t[4]+'</strong></td><td class="small muted">'+g+'</td></tr>'}).join("");
+  var LV={hi:["較高","hi"],mid:["中等","mid"],lo:["較低",""]};
+  $("rumourTable").querySelector("tbody").innerHTML=(C.rumours||[]).map(function(r){var l=LV[r[3]]||LV.lo;return '<tr><td><strong>'+esc(r[0])+'</strong></td><td>'+esc(r[1])+'</td><td>'+esc(r[2])+'</td><td><span class="tag2 '+l[1]+'">'+l[0]+'</span></td></tr>'}).join("");
+
+  /* ---- charts ---- */
+  var NS="http://www.w3.org/2000/svg";
+  function el(n,a,t){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);if(t!=null)e.textContent=t;return e}
+  function cv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
+  function clear(id){var s=$(id);while(s.firstChild)s.removeChild(s.firstChild);return s}
+  function grid(svg,L,R,W,max,step,Y){for(var v=0;v<=max;v+=step){svg.appendChild(el("line",{x1:L,x2:W-R,y1:Y(v),y2:Y(v),stroke:cv("--rule")}));svg.appendChild(el("text",{x:L-8,y:Y(v)+4,"text-anchor":"end"},v))}}
+  function drawAll(){
+    (function(){var svg=clear("ptsChart"),W=520,H=220,L=32,R=18,Tp=14,B=28,iw=W-L-R,ih=H-Tp-B;
+      var cum=[],c=0;M.forEach(function(m){var x=res(m);c+=x==="W"?3:x==="D"?1:0;cum.push(c)});
+      var max=Math.max(15,Math.ceil((c+3)/5)*5);function X(i){return L+iw*i/Math.max(1,N-1)}function Y(v){return Tp+ih*(1-v/max)}
+      grid(svg,L,R,W,max,5,Y);
+      var d="",ar="M"+X(0)+","+Y(0);cum.forEach(function(v,i){d+=(i?"L":"M")+X(i)+","+Y(v);ar+="L"+X(i)+","+Y(v)});ar+="L"+X(N-1)+","+Y(0)+"Z";
+      svg.appendChild(el("path",{d:ar,fill:cv("--accent"),"fill-opacity":".1"}));
+      svg.appendChild(el("path",{d:d,fill:"none",stroke:cv("--accent"),"stroke-width":"2.5"}));
+      cum.forEach(function(v,i){var r=res(M[i]);svg.appendChild(el("circle",{cx:X(i),cy:Y(v),r:i===N-1?6:4,fill:cv(r==="W"?"--win":r==="L"?"--loss":"--draw"),stroke:cv("--sheet"),"stroke-width":"1.5"}));if(N<=20||i%2===0)svg.appendChild(el("text",{x:X(i),y:H-8,"text-anchor":"middle"},M[i].r))});
+      svg.appendChild(el("text",{x:X(N-1)-10,y:Y(c)-10,"text-anchor":"end","class":"ink","font-weight":"700"},c+" 分"));
+    })();
+    (function(){var svg=clear("shotChart"),W=520,H=240,L=32,R=10,Tp=12,B=28,iw=W-L-R,ih=H-Tp-B;
+      var mx=Math.max.apply(null,M.map(function(m){return Math.max(m.s,m.os)}).concat([10]));var max=Math.ceil(mx/10)*10;function Y(v){return Tp+ih*(1-v/max)}grid(svg,L,R,W,max,10,Y);
+      var gw=iw/N,bw=Math.max(2,Math.min(14,gw/2-3));
+      M.forEach(function(m,i){var cx=L+gw*i+gw/2;svg.appendChild(el("rect",{x:cx-bw-1,y:Y(m.s),width:bw,height:Y(0)-Y(m.s),fill:cv("--accent")}));svg.appendChild(el("rect",{x:cx+1,y:Y(m.os),width:bw,height:Y(0)-Y(m.os),fill:cv("--muted"),"fill-opacity":".5"}));if(N<=20||i%2===0)svg.appendChild(el("text",{x:cx,y:H-8,"text-anchor":"middle"},m.r))});
+    })();
+    (function(){var F=[0,0,0,0,0,0],G=[0,0,0,0,0,0],lab=["1–15","16–30","31–45","46–60","61–75","76–90+"];
+      function b(x){return x<=15?0:x<=30?1:x<=45?2:x<=60?3:x<=75?4:5}
+      M.forEach(function(m){(m.gf||[]).forEach(function(x){F[b(x)]++});(m.ga||[]).forEach(function(x){G[b(x)]++})});
+      var svg=clear("timeChart"),W=520,H=240,L=32,R=10,Tp=16,B=28,iw=W-L-R,ih=H-Tp-B,max=Math.max(4,Math.ceil(Math.max.apply(null,F.concat(G))/2)*2);
+      function Y(v){return Tp+ih*(1-v/max)}grid(svg,L,R,W,max,2,Y);var gw=iw/6,bw=Math.min(22,gw/2-5);
+      F.forEach(function(v,i){var cx=L+gw*i+gw/2;svg.appendChild(el("rect",{x:cx-bw-1,y:Y(v),width:bw,height:Y(0)-Y(v),fill:cv("--win")}));svg.appendChild(el("rect",{x:cx+1,y:Y(G[i]),width:bw,height:Y(0)-Y(G[i]),fill:cv("--loss")}));if(v)svg.appendChild(el("text",{x:cx-bw/2-1,y:Y(v)-4,"text-anchor":"middle","class":"ink"},v));if(G[i])svg.appendChild(el("text",{x:cx+bw/2+1,y:Y(G[i])-4,"text-anchor":"middle","class":"ink"},G[i]));svg.appendChild(el("text",{x:cx,y:H-8,"text-anchor":"middle"},lab[i]))});
+    })();
+    (function(){var D=[["Tonali",92.5],["M. Fernandes",85],["Savio",75],["Marmoush*",60],["van Hecke",52],["Adarabioyo",10],["Robertson",0],["Senesi",0],["Dubravka",0]];
+      var svg=clear("spendChart"),W=520,H=280,L=104,R=80,rh=(H-12)/D.length,iw=W-L-R;
+      D.forEach(function(d,i){var y=6+i*rh,bh=rh*.6;svg.appendChild(el("text",{x:L-10,y:y+bh/2+4,"text-anchor":"end","class":"ink"},d[0]));if(d[1])svg.appendChild(el("rect",{x:L,y:y,width:iw*d[1]/100,height:bh,fill:cv("--accent"),"fill-opacity":i<2?"1":".65"}));svg.appendChild(el("text",{x:L+iw*d[1]/100+8,y:y+bh/2+4},d[1]?"£"+d[1]+"m":"自由轉會"))});
+    })();
+    if(window.__drawKpi)window.__drawKpi();
+  }
+  drawAll();
+  try{matchMedia("(prefers-color-scheme: dark)").addEventListener("change",drawAll)}catch(e){}
+  try{new MutationObserver(drawAll).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]})}catch(e){}
+
+  /* ---- tooltips ---- */
+  var tip=$("tip"),cur=null;function hideTip(){tip.style.display="none";cur=null}
+  document.addEventListener("click",function(e){var t=e.target.closest(".term");if(!t){hideTip();return}e.preventDefault();if(cur===t){hideTip();return}cur=t;tip.textContent=t.getAttribute("data-tip");tip.style.display="block";var r=t.getBoundingClientRect(),w=tip.offsetWidth,h=tip.offsetHeight;var x=Math.max(8,Math.min(innerWidth-w-8,r.left+r.width/2-w/2)),y=r.bottom+8;if(y+h>innerHeight-8)y=r.top-h-8;tip.style.left=x+"px";tip.style.top=y+"px"});
+  addEventListener("scroll",hideTip,{passive:true});document.addEventListener("keydown",function(e){if(e.key==="Escape")hideTip()});
+
+  /* ---- share ---- */
+  var toastT;function toast(m){var t=$("toast");t.textContent=m;t.style.display="block";clearTimeout(toastT);toastT=setTimeout(function(){t.style.display="none"},2600)}
+  function copy(text,ok){try{navigator.clipboard.writeText(text).then(function(){toast(ok)},function(){toast("瀏覽器不允許自動複製，請手動選取")})}catch(e){toast("瀏覽器不允許自動複製，請手動選取")}}
+  $("shareBtn").addEventListener("click",function(){var h=location.hash||"#home";copy(SITE+(h==="#admin"?"":h),"連結已複製")});
+  $("matchList").addEventListener("click",function(e){var b=e.target.closest("[data-copy]");if(!b)return;var m=M.filter(function(x){return x.r==+b.getAttribute("data-copy")})[0];if(!m)return;
+    var lines=["【英超第"+m.r+"輪】"+mTitle(m).replace(/ : /g,":")+"（"+ZH[res(m)]+"）",m.d+" 台北時間",""];
+    m.ev.forEach(function(x){if(x[0]!=="—")lines.push(x[0]+" "+x[1]+(x[2]?"（熱刺 "+x[2]+"）":""))});
+    lines.push("","控球 "+m.p+"% : "+(100-m.p)+"%","射門 "+m.s+" : "+m.os+"（射正 "+m.st+" : "+m.ost+"）","角球 "+m.c+" : "+m.oc,"",m.note,"","完整數據 "+SITE+"#matches");
+    copy(lines.join("\n"),"懶人包已複製，可以貼到 PTT、Threads")});
+
+
+  /* ---- match card image (PNG) ---- */
+  var dl=null;(async function(){try{if(window.claude&&window.claude.use)dl=await window.claude.use("downloads")}catch(e){}})();
+  function wrapText(ctx,text,x,y,maxW,lh,maxLines){var line="",lines=0;for(var i=0;i<text.length;i++){var t=line+text[i];if(ctx.measureText(t).width>maxW&&line){ctx.fillText(line,x,y);y+=lh;lines++;line=text[i];if(lines>=maxLines-1){var rest=text.slice(i);while(ctx.measureText(rest+"…").width>maxW&&rest.length)rest=rest.slice(0,-1);ctx.fillText(rest+(rest.length<text.length-i?"…":""),x,y);return y+lh}}else line=t}if(line){ctx.fillText(line,x,y);y+=lh}return y}
+  function drawCard(m){
+    var W=1080,H=1350,c=document.createElement("canvas");c.width=W;c.height=H;var x=c.getContext("2d"),R=res(m);
+    var SER='"Noto Serif TC",serif',SAN='"Noto Sans TC",sans-serif',NUM='"Barlow Condensed",sans-serif';
+    x.fillStyle="#132257";x.fillRect(0,0,W,H);
+    x.globalAlpha=.05;x.fillStyle="#fff";for(var i=0;i<12;i++)x.fillRect(i*W/12,0,W/24,H);x.globalAlpha=1;
+    x.strokeStyle="rgba(255,255,255,.14)";x.lineWidth=3;x.strokeRect(60,60,W-120,H-120);
+    x.fillStyle="#9fb3ff";x.font="700 34px "+SAN;x.fillText("英超第 "+m.r+" 輪 · "+m.d+" 台北時間",100,150);
+    var col=R==="W"?"#3cc47a":R==="L"?"#ff6b6b":"#aab0c8";x.fillStyle=col;x.fillRect(100,185,120,56);x.fillStyle="#fff";x.font="700 36px "+SAN;x.fillText(ZH[R],136,226);
+    var home=m.h==="主"?"熱刺":m.o,away=m.h==="主"?m.o:"熱刺",hs=m.h==="主"?m.f:m.a,as=m.h==="主"?m.a:m.f;
+    x.font="900 76px "+SER;x.fillText(home,100,350);x.fillText(away,100,560);
+    x.font="700 190px "+NUM;x.textAlign="right";x.fillText(String(hs),W-110,380);x.fillText(String(as),W-110,590);x.textAlign="left";
+    x.fillStyle="rgba(255,255,255,.25)";x.fillRect(100,420,W-200,3);
+    var y=670;x.font="500 32px "+SAN;x.fillStyle="#fff";
+    m.ev.filter(function(e){return e[0]!=="—"}).slice(0,5).forEach(function(e){x.fillStyle="#ffe27a";x.font="700 36px "+NUM;x.fillText(e[0],100,y);x.fillStyle="#fff";x.font="500 31px "+SAN;wrapText(x,e[1],230,y,W-330,40,1);y+=50});
+    y+=16;var st=[["控球",m.p,100-m.p],["射門",m.s,m.os],["射正",m.st,m.ost],["角球",m.c,m.oc]];
+    st.forEach(function(sv){var t=(sv[1]+sv[2])||1,bw=W-420;x.fillStyle="#cfd6ff";x.font="500 28px "+SAN;x.fillText(sv[0],100,y+22);x.font="700 34px "+NUM;x.fillStyle="#fff";x.fillText(String(sv[1]),210,y+24);x.textAlign="right";x.fillText(String(sv[2]),W-100,y+24);x.textAlign="left";
+      x.fillStyle="rgba(255,255,255,.18)";x.fillRect(270,y+8,bw,16);x.fillStyle="#6f8fff";x.fillRect(270,y+8,bw*sv[1]/t,16);y+=58});
+    y+=20;x.fillStyle="#fff";x.font="500 31px "+SAN;y=wrapText(x,m.note,100,y,W-200,46,3);
+    x.fillStyle="rgba(255,255,255,.25)";x.fillRect(100,H-170,W-200,2);
+    x.fillStyle="#fff";x.font="900 40px "+SER;x.fillText("熱刺數據站",100,H-110);x.font="500 28px "+SAN;x.fillStyle="#cfd6ff";x.textAlign="right";x.fillText("文／嘻嘻",W-100,H-112);x.textAlign="left";
+    return c;
+  }
+  function showModal(url){$("modalImg").src=url;$("modal").style.display="flex";$("modalClose").focus()}
+  $("modalClose").addEventListener("click",function(){$("modal").style.display="none"});
+  $("modal").addEventListener("click",function(e){if(e.target===$("modal"))$("modal").style.display="none"});
+  $("matchList").addEventListener("click",function(e){var b=e.target.closest("[data-card]");if(!b)return;var m=M.filter(function(x){return x.r==+b.getAttribute("data-card")})[0];if(!m)return;
+    var go=function(){var cv2=drawCard(m);
+      if(dl){cv2.toBlob(function(blob){dl.save({filename:"spurs-round"+m.r+".png",data:blob}).then(function(){toast("圖卡已儲存")},function(err){if(err&&err.code==="declined")return;showModal(cv2.toDataURL("image/png"))})},"image/png")}
+      else showModal(cv2.toDataURL("image/png"))};
+    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(go);else go();
+  });
+  /* ---- admin ---- */
+  var TASKS=[["share","把網站設成「有連結的人都能看」"],["name","決定一個好記的品牌名和頭像，各平台統一"],["threads","開 Threads / IG，每場賽後發一則重點加連結"],["ptt","在 PTT 英超板（FAPL）分享一篇專欄，先讀板規，以討論為主"],["dcard","在 Dcard 足球板、Mobile01 足球區發一篇新手向的熱刺現況整理"],["osc","聯絡熱刺官方認證的台灣球迷會（Taiwan Spurs）"],["derby","北倫敦德比（12/7）前做一篇特輯"],["window","1 月冬窗期間每週更新傳聞"],["move","把網站搬到自己的網址並接上 Google Analytics"]];
+  var isOwner=false,adminInit=false,kpis=[],taskState={};
+  function renderStatus(){
+    if(!C.meta)return;var now=Date.now();
+    $("kChecked").textContent=fmtT(C.meta.checked);$("kUpdated").textContent=fmtT(C.meta.updated);
+    var fx=(C.fixtures||[]).filter(function(f){return new Date(f[0])>now})[0];$("kNext").textContent=fx?dur(new Date(fx[0])-now):"–";$("kNextL").textContent=fx?"距下一場（vs "+fx[1]+"）":"距下一場";
+    var hrs=(now-new Date(C.meta.checked))/36e5,items=[];
+    items.push(hrs<=7?["var(--win)","自動更新正常運作，最近一次檢查在 "+Math.max(0,Math.round(hrs*10)/10)+" 小時前。"]:["var(--loss)","已經 "+Math.round(hrs)+" 小時沒有自動檢查。到 Claude 的排程任務看看是否被暫停，或直接跟 Claude 說「更新熱刺網站」。"]);
+    var missed=(C.fixtures||[]).filter(function(f){return new Date(f[0]).getTime()+3*36e5<now});
+    if(missed.length)items.push(["var(--warn)","有 "+missed.length+" 場比賽已結束但戰報還沒進來（"+missed.map(function(f){return f[1]}).join("、")+"），下一次自動更新應該會補上。"]);
+    items.push(["var(--draw)","評分、預測、可信度是嘻嘻觀點，自動更新會依新比賽調整文字。"]);
+    $("statusList").innerHTML=items.map(function(i){return '<div class="status"><span class="dotc" style="background:'+i[0]+'"></span><span>'+esc(i[1])+'</span></div>'}).join("");
+  }
+  window.__drawKpi=function(){if(!adminInit)return;var by={},tot=0;kpis.forEach(function(k){tot+=k.v;by[k.ch]=(by[k.ch]||0)+k.v});$("kTotal").textContent=tot.toLocaleString("zh-TW");$("kTotalL").textContent=kpis.length?"推廣總互動（"+kpis.length+" 筆）":"推廣總互動";
+    var svg=clear("chChart"),arr=Object.keys(by).map(function(k){return[k,by[k]]}).sort(function(a,b){return b[1]-a[1]});
+    if(!arr.length){svg.appendChild(el("text",{x:260,y:110,"text-anchor":"middle"},"有紀錄後會顯示在這裡"));}
+    else{var max=arr[0][1]||1,L=86,R=70,rh=Math.min(28,208/arr.length),iw=520-L-R;arr.forEach(function(a,i){var y=6+i*rh,w=Math.max(2,iw*a[1]/max);svg.appendChild(el("text",{x:L-8,y:y+rh*.55,"text-anchor":"end","class":"ink"},a[0]));svg.appendChild(el("rect",{x:L,y:y+2,width:w,height:rh*.6,fill:cv("--accent")}));svg.appendChild(el("text",{x:L+w+6,y:y+rh*.55},a[1].toLocaleString("zh-TW")))})}
+    var rows=kpis.slice().sort(function(a,b){return a.d<b.d?1:a.d>b.d?-1:b.t-a.t}).slice(0,30);
+    $("kpiTable").querySelector("tbody").innerHTML=rows.length?rows.map(function(k){return '<tr><td class="num">'+esc(k.d)+'</td><td>'+esc(k.ch)+'</td><td>'+esc(k.m)+'</td><td class="r num">'+k.v.toLocaleString("zh-TW")+'</td><td class="muted">'+esc(k.n)+'</td><td><button class="chip" type="button" data-del="'+esc(k.id)+'">刪除</button></td></tr>'}).join(""):'<tr><td colspan="6" class="muted">還沒有紀錄。發完第一篇推廣文後，把數字記在這裡。</td></tr>';
+  };
+  function renderTasks(){$("taskList").innerHTML=TASKS.map(function(t){var d=!!taskState[t[0]];return '<label class="check'+(d?" done":"")+'"><input type="checkbox" data-task="'+t[0]+'"'+(d?" checked":"")+'><span>'+esc(t[1])+'</span></label>'}).join("")}
+  function initAdmin(db){
+    if(adminInit)return;adminInit=true;renderStatus();renderTasks();window.__drawKpi();
+    var msg=$("kpiMsg");$("kDate").value=new Date(Date.now()+8*36e5).toISOString().slice(0,10);
+    if(!db){msg.textContent="現在連不上資料庫，紀錄功能暫時不能用。";return}
+    var col=db.collection("admin/main/kpi"),lt=setTimeout(function(){msg.textContent="資料載入比較慢，顯示的可能不是最新紀錄。"},10000);
+    col.onSnapshot(function(s){clearTimeout(lt);if(!s.metadata.fromCache)msg.textContent="";kpis=s.docs.map(function(d){var x=d.data()||{};return{id:d.id,d:String(x.d||""),ch:String(x.ch||"其他"),m:String(x.m||""),v:Number(x.v)||0,n:String(x.n||""),t:Number(x.t)||0}});window.__drawKpi()},function(e){clearTimeout(lt);msg.textContent="讀取失敗（"+e.code+"）"});
+    $("kpiForm").addEventListener("submit",function(e){e.preventDefault();var v=parseInt($("kVal").value,10);if(!(v>=0)){msg.textContent="請輸入數字。";return}
+      col.add({d:$("kDate").value,ch:$("kCh").value,m:$("kMet").value,v:v,n:$("kNote").value.trim(),t:Date.now()}).then(function(){msg.textContent="已新增。";$("kVal").value="";$("kNote").value=""},function(err){msg.textContent=err.code==="quota_exceeded"?"資料庫滿了，請刪掉一些舊紀錄。":"新增失敗（"+err.code+"）"})});
+    $("kpiTable").addEventListener("click",function(e){var b=e.target.closest("[data-del]");if(!b)return;if(b.dataset.c!=="1"){b.dataset.c="1";b.textContent="確定？";return}col.doc(b.getAttribute("data-del")).delete().catch(function(err){msg.textContent="刪除失敗（"+err.code+"）"})});
+    var td=db.doc("admin/tasks"),q=Promise.resolve();td.onSnapshot(function(s){taskState=(s.exists&&s.data().done)||{};renderTasks()},function(){});
+    $("taskList").addEventListener("change",function(e){var c=e.target.closest("[data-task]");if(!c)return;var nx2=Object.assign({},taskState);nx2[c.getAttribute("data-task")]=c.checked;taskState=nx2;renderTasks();q=q.then(function(){return td.set({done:nx2})}).catch(function(err){toast("儲存失敗（"+err.code+"）")})});
+    var nd=db.doc("admin/notes"),nt=$("notes"),touched=false;nt.addEventListener("input",function(){touched=true});
+    nd.get().then(function(s){if(s.exists&&!touched)nt.value=String(s.data().text||"")},function(){});
+    $("saveNotes").addEventListener("click",function(){$("notesMsg").textContent="儲存中…";nd.set({text:nt.value,t:Date.now()}).then(function(){$("notesMsg").textContent="已儲存";touched=false},function(err){$("notesMsg").textContent="儲存失敗（"+err.code+"）"})});
+  }
+  (async function(){try{if(!document.getElementById("adminTab"))return;var cl=window.claude;if(!cl||!cl.use)return;var u=await cl.use("user");isOwner=!!(u&&u.isOwner&&u.isOwner());if(!isOwner)return;$("adminTab").hidden=false;var db=await cl.use("db");initAdmin(db);route()}catch(e){}})();
+
+  /* ---- routing ---- */
+  var views=["home","article","matches","tactics","stats","market","columns","glossary"];
+  function route(){var h=(location.hash||"").slice(1);if(h.indexOf("a-")===0){renderPost(h.slice(2));h="article";scrollTo(0,0)}if(views.indexOf(h)<0||(h==="admin"&&!isOwner))h="home";if(h==="admin")renderStatus();
+    views.forEach(function(v){$("v-"+v).classList.toggle("on",v===h)});
+    document.querySelectorAll("nav.tabs a").forEach(function(a){if(a.getAttribute("href")==="#"+(h==="article"?"columns":h))a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});hideTip()}
+  addEventListener("hashchange",function(){route();var n=document.querySelector("nav.tabs");if(scrollY>n.offsetTop)scrollTo(0,n.offsetTop)});
+  route();
+})();
+</script>
+</body>
+</html>
